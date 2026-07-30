@@ -275,3 +275,106 @@ Backend Developer:
 **Estado:** 🟡 En desarrollo
 
 ---
+
+# 🚀 TechMind Frontend & UX/UI
+
+Frontend del proyecto TechMind – Organización Inteligente del Conocimiento Técnico, desarrollado como parte del Hackathon Oracle Next Education (ONE) + Alura.
+
+# 📖 Descripción
+
+El Frontend de TechMind constituye la interfaz visual e interactiva que permite a los usuarios registrar, visualizar, buscar y consultar contenidos técnicos de manera organizada y eficiente. Diseñado bajo metodologías centradas en el usuario (UX/UI), proporciona un flujo ágil para procesar textos técnicos y consumir en tiempo real los resultados de clasificación y análisis generados por los modelos de Inteligencia Artificial (desarrollados en Python) y expuestos a través de la API REST del backend.
+
+# 🛠 Tecnologías y Herramientas utilizadas
+
+- HTML5
+- CSS3 (Diseño responsivo y personalizado)
+- JavaScript ES6+ (Lógica de interacción en el cliente y peticiones HTTP vía Fetch API)
+- Python (Desarrollo, procesamiento de texto y entrenamiento de modelos de Ciencia de Datos / IA)
+- Canva (Diseño visual, prototipado)
+- Visual Studio Code
+- Git / GitHub
+
+# 📂 Arquitectura del proyecto
+
+El cliente sigue una estructura modular para garantizar la separación de responsabilidades entre vistas, estilos y lógica de comunicación.
+
+src
+└── main
+    └── resources
+        ├── static
+        │   ├── css
+        │   │   ├── styles.css
+        │   │   └── components.css
+        │   ├── js
+        │   │   ├── app.js       (Lógica principal de la aplicación)
+        │   │   ├── api.js       (Peticiones a la API REST)
+        │   │   └── ui.js        (Renderizado dinámico de componentes en pantalla)
+        │   ├── assets
+        │   │   └── images
+        │   └── index.html
+
+# ✅ Avances realizados
+
+## Diseño UX/UI y Prototipado
+- Investigación de usuarios e identificación de necesidades de lectura y catalogación de contenidos técnicos.
+- Diseño de la interfaz, estructuración de pantallas y definición de componentes visuales en Canva.
+- Definición de la guía de estilos (paleta de colores, tipografía e iconografía) enfocada en la legibilidad y la usabilidad.
+- Aplicación de buenas prácticas de UX Writing para optimizar la interacción y guiar al usuario en la carga e interpretación de los resultados del modelo de datos.
+
+## Estructura Base del Frontend
+- Maquetación HTML5 semántica de las vistas principales:
+  - Formulario para ingreso de contenido técnico (título y texto).
+  - Panel visual de resultados procesados (categorías, palabras clave, porcentaje de probabilidad).
+  - Buscador y filtro por temas.
+- Estilizado visual con CSS3 adaptativo (Responsive Design) para escritorio y dispositivos móviles.
+
+## Estructura Lógica y Funcional de Scripts (JavaScript)
+- Configuración de controladores en JavaScript (`app.js`, `ui.js`) para la manipulación dinámica del DOM y la gestión de eventos de usuario.
+- Definición del módulo de comunicación (`api.js`) preparado para realizar peticiones asíncronas HTTP (`fetch`) enviando solicitudes `POST /contenido` hacia la API REST.
+
+## Gestión del proyecto
+- Control de versiones e integración en el repositorio oficial de GitHub mediante Git.
+
+# 🔄 Estado actual
+
+Actualmente el frontend cuenta con:
+✔ Prototipo y maquetación visual definidos en Canva
+✔ Interfaz HTML5/CSS3 funcional y responsiva
+✔ Estructura de código JavaScript modular para consumo de APIs
+✔ Formulario de carga y área de visualización dinámica de respuestas JSON
+✔ Preparación del flujo interactivo para conexión con la API REST y el modelo de IA en Python
+
+# 🚧 En desarrollo
+
+Las siguientes funcionalidades forman parte del siguiente sprint de desarrollo:
+- Integración completa con los endpoints del Backend en Spring Boot (peticiones POST /contenido).
+- Manejo de estados de carga (spinners/loaders) durante el procesamiento del modelo de IA en Python.
+- Control de errores de red y validación visual de formularios de entrada.
+- Implementación de vista para búsqueda semántica y filtrado dinámico por categorías.
+- Ajustes de accesibilidad (WCAG) y refinamiento continuo del UX Writing.
+- Despliegue de archivos estáticos en infraestructura de Oracle Cloud Infrastructure (OCI).
+
+# 📌 Objetivo
+
+Proveer una experiencia de usuario intuitiva, accesible y fluida que permita transformar textos y notas técnicas dispersas en un repositorio de conocimiento estructurado y fácilmente reutilizable.
+
+# 👨‍💻 Equipo
+
+Proyecto desarrollado durante el Hackathon Oracle Next Education (ONE) + Alura.
+UX/UI Designer & UX Writer:
+- Diseño de la experiencia de usuario (UX), redacción de contenidos (UX Writing) y diseño de interfaz (UI) en Canva.
+- Maquetación y estructura del cliente web (HTML, CSS, JavaScript).
+- Alineación del flujo visual con la estructura de respuestas JSON entregadas por el backend y el modelo de IA.
+
+# 📈 Próximos pasos
+
+- Conectar peticiones Fetch en JavaScript con los endpoints expuestos por la API REST.
+- Renderizar en tiempo real la clasificación y extracción de palabras clave retornadas por la IA.
+- Diseñar e implementar el dashboard de visualización y consulta de métricas/categorías.
+- Realizar pruebas de usabilidad con la interfaz terminada.
+- Desplegar el cliente en OCI.
+
+# Estado del proyecto
+
+Versión actual: 0.1.0-SNAPSHOT
+Estado: 🟡 En desarrollo
