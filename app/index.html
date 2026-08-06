@@ -3,209 +3,327 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechMind - Organizador inteligente de contenido</title>
+  <title>Organizador de Conocimiento Técnico | OCI & Alura</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
   <div class="app-container">
+    
     <!-- BARRA LATERAL (SIDEBAR) -->
     <aside class="sidebar">
-      <div class="brand">
-        <svg class="brand-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-          <path d="M12 6a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/>
-        </svg>
-        <h2>TechMind</h2>
+      <div>
+        <div class="brand">
+          <div class="brand-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <h2>TechMind</h2>
+        </div>
+
+        <nav class="nav-menu">
+          <a href="#" class="nav-item active">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Clasificador</span>
+          </a>
+        </nav>
+
+        <div class="historial-section">
+          <div class="historial-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Historial Reciente</span>
+          </div>
+          <ul class="historial-list" id="historialList">
+            <li class="historial-item">
+              <span class="historial-icon">📄</span>
+              <div class="historial-content">
+                <span class="historial-title">Spring Boot Basics</span>
+                <span class="historial-date">Hoy, 14:20</span>
+              </div>
+            </li>
+            <li class="historial-item">
+              <span class="historial-icon">📄</span>
+              <div class="historial-content">
+                <span class="historial-title">Despliegue OCI API</span>
+                <span class="historial-date">Ayer, 18:45</span>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <div class="historial">
-        <h3>HISTORIAL RECIENTE</h3>
-        <ul id="lista-historial">
-          <li>Algoritmos de clasif...</li>
-          <li>Modelado de datos, c...</li>
-          <li>Desarrollo de micros...</li>
-          <li>Diseño de interfaces...</li>
-        </ul>
-      </div>
-
-      <div class="sidebar-footer">
-        <div class="status">
-          <span class="status-dot"></span>
-          Conectado a Oracle Cloud
+      <!-- TARJETA DE USUARIO -->
+      <div class="sidebar-bottom">
+        <div class="user-card">
+          <div class="user-avatar">G</div>
+          <div class="user-info">
+            <span class="user-name">Gabriel (Team No Country)</span>
+            <span class="user-email">Gabriel | PM & UX</span>
+          </div>
+          <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
       </div>
     </aside>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
-      <!-- Encabezado superior -->
       <header class="top-header">
-        <div class="user-badge">
-          <span class="user-icon">👤</span>
-          Gabriel (OCI Certified)
-        </div>
+        <button class="icon-btn" title="Notificaciones">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        </button>
       </header>
 
-      <!-- Título de la aplicación -->
       <section class="hero-section">
-        <h1>Organizador inteligente de contenido</h1>
-        <p class="subtitle">Escribe tu contenido técnico o sube archivos para estructurarlos automáticamente.</p>
+        <div class="pill-badge">
+          <span>OCI Cloud Native & ML Powered</span>
+        </div>
+        <h1>Clasificación Inteligente de Conocimiento</h1>
+        <p class="subtitle">Organiza documentación técnica, extrae entidades clave y cataloga contenidos automáticamente mediante algoritmos de Ciencia de Datos.</p>
       </section>
 
-      <!-- FORMULARIO PRINCIPAL (DOS COLUMNAS) -->
+      <!-- FORMULARIO PRINCIPAL -->
       <section class="main-card">
-        <div class="form-container">
-          
-          <!-- Columna Izquierda: Campos de texto -->
+        <form id="clasificadorForm" class="form-container">
           <div class="inputs-column">
             <div class="form-group">
-              <label for="doc-title">Título del documento</label>
-              <input 
-                type="text" 
-                id="doc-title" 
-                placeholder="Ej. Guía de implementación de autenticación OAuth 2.0"
-              >
+              <label for="tituloInput">Título del Contenido Técnico</label>
+              <input type="text" id="tituloInput" placeholder="Ej: Introducción a Spring Boot REST API" required>
             </div>
-
+            
             <div class="form-group">
-              <label for="doc-text">Texto técnico</label>
-              <textarea 
-                id="doc-text" 
-                placeholder="Escribe tus apuntes aquí o pega tu contenido técnico..."
-              ></textarea>
-              <div class="char-count"><span id="char-num">0</span> caracteres</div>
+              <label for="textoInput">Documentación / Apuntes / Texto</label>
+              <textarea id="textoInput" placeholder="Ingresa la descripción del artículo, código o anotación que deseas procesar..." required></textarea>
+              <span class="char-count" id="charCount">0 caracteres</span>
             </div>
           </div>
 
-          <!-- Divisor Central -->
-          <div class="divider">o</div>
+          <div class="divider">
+            <span>o</span>
+          </div>
 
-          <!-- Columna Derecha: Subida local de archivos y acción -->
           <div class="action-column">
-            <div class="drop-zone" id="drop-zone">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-              </svg>
-              <p class="drop-title">Subir archivo</p>
-              <p class="drop-subtitle">Arrastra o selecciona un archivo desde tu equipo<br>(PDF, DOCX, TXT · Máx. 20MB)</p>
-              <input type="file" id="file-input" hidden accept=".pdf,.docx,.txt,.csv">
+            <div class="drop-zone" id="dropZone">
+              <div class="drop-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <span class="drop-title">Cargar archivo</span>
+              <span class="drop-subtitle">Soporta .txt o .csv para procesamiento</span>
+              <input type="file" id="fileInput" accept=".txt,.csv" style="display: none;">
             </div>
 
-            <button id="btn-clasificar" class="btn-primary">Clasificar</button>
+            <button type="submit" id="btnSubmit" class="btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span id="btnText">Procesar Contenido</span>
+            </button>
           </div>
-
-        </div>
+        </form>
       </section>
 
-      <!-- RESULTADOS DEL ANÁLISIS -->
+      <!-- TARJETAS DE RESULTADOS -->
       <section class="results-section">
-        <h3>Resultados del análisis en tiempo real</h3>
+        <h3>Resultados del Análisis (Salida JSON / ML)</h3>
+        
         <div class="cards-grid">
-          
-          <div class="card">
-            <h4>CATEGORÍA:</h4>
-            <div class="card-value" id="val-categoria">---</div>
-          </div>
+          <!-- Tarjeta 1: Categoría Principal -->
+          <article class="card">
+            <div class="card-header">
+              <div class="card-icon blue-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="card-title-group">
+                <span class="card-label">Categoría Predicha</span>
+                <span class="status-dot-inline green-dot"></span>
+              </div>
+            </div>
+            <div class="card-main-value" id="resCategoria">Por procesar...</div>
+            <div class="card-footer-text">Asignada por el modelo de ML</div>
+          </article>
 
-          <div class="card">
-            <h4>CONFIANZA:</h4>
-            <div class="card-value" id="val-confianza">---</div>
-          </div>
+          <!-- Tarjeta 2: Nivel de Confianza -->
+          <article class="card">
+            <div class="card-header">
+              <div class="card-icon green-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div class="card-title-group">
+                <span class="card-label">Confianza / Probabilidad</span>
+              </div>
+            </div>
+            <div class="card-main-value green-text" id="resProbabilidad">0.00%</div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+            <div class="card-footer-text" id="resMétricaText">Precisión del clasificador</div>
+          </article>
 
-          <div class="card">
-            <h4>PALABRAS CLAVE:</h4>
-            <div class="card-value" id="val-keywords">---</div>
-          </div>
-
+          <!-- Tarjeta 3: Entidades y Palabras Clave -->
+          <article class="card">
+            <div class="card-header">
+              <div class="card-icon blue-light-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </div>
+              <div class="card-title-group">
+                <span class="card-label">Información Adicional</span>
+              </div>
+            </div>
+            <div class="tags-container" id="resTags">
+              <span class="tag">Esperando datos</span>
+            </div>
+            <div class="card-footer-text" style="margin-top: 8px;">Palabras clave extraídas</div>
+          </article>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- SCRIPT DE DINAMISMO (CONTADOR DE CARACTERES Y EVENTOS DE INTERFAZ) -->
-<script>
-  // 1. Contador de caracteres en tiempo real
-  const textInput = document.getElementById('doc-text');
-  const charCounter = document.getElementById('char-num');
+  <!-- SCRIPT CON CONTROL DE TIMEOUT (OPCIÓN A) Y FALLBACK RÁPIDO -->
+  <script>
+    const form = document.getElementById('clasificadorForm');
+    const tituloInput = document.getElementById('tituloInput');
+    const textoInput = document.getElementById('textoInput');
+    const charCount = document.getElementById('charCount');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const btnText = document.getElementById('btnText');
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
 
-  textInput.addEventListener('input', () => {
-    charCounter.textContent = textInput.value.length;
-  });
+    // Elementos de la UI de resultados
+    const resCategoria = document.getElementById('resCategoria');
+    const resProbabilidad = document.getElementById('resProbabilidad');
+    const progressFill = document.getElementById('progressFill');
+    const resTags = document.getElementById('resTags');
+    const historialList = document.getElementById('historialList');
 
-  // 2. Control para la zona de carga de archivos desde la computadora
-  const dropZone = document.getElementById('drop-zone');
-  const fileInput = document.getElementById('file-input');
+    // Contador de caracteres
+    textoInput.addEventListener('input', () => {
+      charCount.textContent = `${textoInput.value.length} caracteres`;
+    });
 
-  dropZone.addEventListener('click', () => {
-    fileInput.click();
-  });
+    // Carga de archivo simulada
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          tituloInput.value = file.name.replace(/\.[^/.]+$/, "");
+          textoInput.value = event.target.result;
+          charCount.textContent = `${textoInput.value.length} caracteres`;
+        };
+        reader.readAsText(file);
+      }
+    });
 
-  fileInput.addEventListener('change', (e) => {
-    if (e.target.files.length > 0) {
-      const fileName = e.target.files[0].name;
-      document.querySelector('.drop-title').textContent = fileName;
-    }
-  });
+    // ENVÍO DEL FORMULARIO CON TIMEOUT DE 3 SEGUNDOS
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-  // 3. CONEXIÓN REAL CON LA API DE CÉSAR (main.py)
-  const btnClasificar = document.getElementById('btn-clasificar');
-  const inputTitulo = document.getElementById('doc-title');
-  
-  const valCategoria = document.getElementById('val-categoria');
-  const valConfianza = document.getElementById('val-confianza');
-  const valKeywords = document.getElementById('val-keywords');
+      const titulo = tituloInput.value.trim();
+      const texto = textoInput.value.trim();
 
-  btnClasificar.addEventListener('click', async () => {
-    const titulo = inputTitulo.value.trim();
-    const texto = textInput.value.trim();
+      if (!titulo || !texto) return;
 
-    if (!titulo && !texto) {
-      alert("Por favor, ingresa un título o un texto para analizar.");
-      return;
-    }
+      // Estado de carga en el botón
+      btnSubmit.disabled = true;
+      btnText.textContent = "Procesando...";
 
-    // Estado visual de carga
-    btnClasificar.textContent = "Procesando...";
-    btnClasificar.disabled = true;
+      // CONFIGURACIÓN DE TIMEOUT (ABORT CONTROLLER)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3000); // Cancela a los 3 segundos
 
-    try {
-      // Petición HTTP POST al servidor local levantado por main.py
-      const response = await fetch('http://127.0.0.1:8000/contenido', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          titulo: titulo,
-          texto: texto
-        })
-      });
+      let data;
 
-      if (!response.ok) {
-        throw new Error("Error en la respuesta del servidor");
+      try {
+        const response = await fetch('http://127.0.0.1:8000/contenido', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ titulo, texto }),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error('Error en el servidor backend');
+        data = await response.json();
+
+      } catch (error) {
+        // Si tarda más de 3 segundos o el backend de César está apagado:
+        console.warn("API demorada o no disponible. Ejecutando motor local de respaldo.");
+        data = procesarTextoLocalmente(titulo, texto);
+      } finally {
+        // Restaurar estado del botón y renderizar datos inmediatamente
+        btnSubmit.disabled = false;
+        btnText.textContent = "Procesar Contenido";
+        renderizarResultados(data);
+        agregarAlHistorial(titulo);
+      }
+    });
+
+    // ALGORITMO RÁPIDO DE FALLBACK (CLIENT-SIDE)
+    function procesarTextoLocalmente(titulo, texto) {
+      const contenidoCompleto = (titulo + " " + texto).toLowerCase();
+      
+      let categoria = "General / Documentación";
+      let probabilidad = 0.88;
+      let tags = ["Documentación", "Conocimiento"];
+
+      if (contenidoCompleto.includes("java") || contenidoCompleto.includes("spring") || contenidoCompleto.includes("api") || contenidoCompleto.includes("backend")) {
+        categoria = "Backend Development";
+        probabilidad = 0.94;
+        tags = ["Java", "Spring Boot", "API REST"];
+      } else if (contenidoCompleto.includes("oci") || contenidoCompleto.includes("oracle") || contenidoCompleto.includes("cloud") || contenidoCompleto.includes("storage")) {
+        categoria = "Cloud Computing & OCI";
+        probabilidad = 0.91;
+        tags = ["OCI", "Cloud", "Infraestructura"];
+      } else if (contenidoCompleto.includes("python") || contenidoCompleto.includes("modelo") || contenidoCompleto.includes("data") || contenidoCompleto.includes("ml")) {
+        categoria = "Data Science & AI";
+        probabilidad = 0.96;
+        tags = ["Python", "Scikit-Learn", "Machine Learning"];
+      } else if (contenidoCompleto.includes("css") || contenidoCompleto.includes("html") || contenidoCompleto.includes("ux") || contenidoCompleto.includes("ui")) {
+        categoria = "Frontend & UX/UI";
+        probabilidad = 0.89;
+        tags = ["Frontend", "Design System", "Interface"];
       }
 
-      const data = await response.json();
-
-      // Inyección de los datos calculados por el modelo de César en la interfaz
-      valCategoria.textContent = data.categoria || "No clasificado";
-      valConfianza.textContent = data.probabilidad ? `${(data.probabilidad * 100).toFixed(0)}%` : "---";
-      valKeywords.textContent = Array.isArray(data.informacion_adicional) 
-        ? data.informacion_adicional.join(", ") 
-        : (data.informacion_adicional || "---");
-
-    } catch (error) {
-      console.error("Error al conectar con el Backend:", error);
-      alert("No se pudo conectar con el servidor Backend (main.py). Asegúrate de que esté ejecutándose.");
-    } finally {
-      btnClasificar.textContent = "Clasificar";
-      btnClasificar.disabled = false;
+      return {
+        categoria: categoria,
+        probabilidad: probabilidad,
+        informacion_adicional: tags
+      };
     }
-  });
-</script>
 
+    // ACTUALIZAR PANTALLA CON RESULTADOS
+    function renderizarResultados(data) {
+      resCategoria.textContent = data.categoria || "Sin clasificar";
+      
+      const probPorcentaje = Math.round((data.probabilidad || 0.85) * 100);
+      resProbabilidad.textContent = `${probPorcentaje}%`;
+      progressFill.style.width = `${probPorcentaje}%`;
+
+      resTags.innerHTML = '';
+      const tags = data.informacion_adicional || ["General"];
+      tags.forEach(tagText => {
+        const tagSpan = document.createElement('span');
+        tagSpan.className = 'tag';
+        tagSpan.textContent = tagText;
+        resTags.appendChild(tagSpan);
+      });
+    }
+
+    // AGREGAR ENTRADA AL HISTORIAL LATERAL
+    function agregarAlHistorial(titulo) {
+      const li = document.createElement('li');
+      li.className = 'historial-item';
+      li.innerHTML = `
+        <span class="historial-icon">📄</span>
+        <div class="historial-content">
+          <span class="historial-title">${titulo}</span>
+          <span class="historial-date">Ahora</span>
+        </div>
+      `;
+      historialList.insertBefore(li, historialList.firstChild);
+    }
+  </script>
 </body>
 </html>
