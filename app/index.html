@@ -3,455 +3,209 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechMind - Organizador Inteligente de Contenido</title>
-  <style>
-    /* RESET Y ESTILOS BASE */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
-
-    body {
-      display: flex;
-      height: 100vh;
-      background-color: #000;
-      color: #fff;
-      overflow: hidden;
-    }
-
-    /* BARRA LATERAL (SIDEBAR) */
-    .sidebar {
-      width: 280px;
-      background-color: #080808;
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .logo h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .historial {
-      flex: 1;
-      margin-top: 2.5rem;
-      overflow-y: auto;
-    }
-
-    .historial h3 {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #888;
-      margin-bottom: 1rem;
-    }
-
-    .historial ul {
-      list-style: none;
-    }
-
-    .historial li {
-      font-size: 0.85rem;
-      color: #ccc;
-      padding: 8px 10px;
-      border-radius: 6px;
-      margin-bottom: 0.4rem;
-      cursor: pointer;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: background 0.2s;
-    }
-
-    .historial li:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
-    }
-
-    .status {
-      font-size: 0.75rem;
-      color: #00ff88;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      background-color: #00ff88;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #00ff88;
-    }
-
-    /* CONTENIDO PRINCIPAL */
-    .main-content {
-      flex: 1;
-      background: linear-gradient(135deg, #3b0764 0%, #1e1b4b 50%, #831843 100%);
-      padding: 2rem 4rem;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .top-header {
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .user-profile {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    /* SECCIÓN HERO / ENTRADA */
-    .hero-section {
-      text-align: center;
-      margin-top: 1rem;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-    }
-
-    .hero-section h1 {
-      font-size: 2.2rem;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-    }
-
-    .hero-section p {
-      opacity: 0.85;
-      font-size: 0.95rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .input-box textarea {
-      width: 100%;
-      height: 110px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background: rgba(255, 255, 255, 0.95);
-      color: #111;
-      padding: 1.2rem;
-      font-size: 0.95rem;
-      outline: none;
-      resize: none;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
-
-    .action-buttons {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-      margin-top: 1.2rem;
-    }
-
-    .icons {
-      display: flex;
-      gap: 15px;
-    }
-
-    .icon-btn {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .icon-btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.35);
-    }
-
-    .btn-primary {
-      background: #6d28d9;
-      color: white;
-      border: none;
-      padding: 12px 48px;
-      border-radius: 24px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .btn-primary:hover {
-      background: #7c3aed;
-      transform: scale(1.02);
-    }
-
-    /* SECCIÓN RESULTADOS DINÁMICOS */
-    .results-section {
-      margin-top: 2.5rem;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-    }
-
-    .results-section h2 {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    .cards-container {
-      display: flex;
-      gap: 20px;
-    }
-
-    .card {
-      flex: 1;
-      background: rgba(244, 114, 182, 0.25);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 1.5rem;
-      border-radius: 16px;
-    }
-
-    .card h4 {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.8rem;
-      opacity: 0.8;
-    }
-
-    .card p {
-      font-size: 1.2rem;
-      font-weight: 700;
-    }
-  </style>
+  <title>TechMind - Organizador inteligente de contenido</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- BARRA LATERAL -->
-  <aside class="sidebar">
-    <div class="logo">
-      <h2>❖ TechMind</h2>
-    </div>
-
-    <div class="historial">
-      <h3>Historial reciente</h3>
-      <ul id="lista-historial">
-        <!-- Se llena dinámicamente con JavaScript -->
-      </ul>
-    </div>
-
-    <div class="status">
-      <span class="dot"></span> Conectado a Oracle Cloud
-    </div>
-  </aside>
-
-  <!-- CONTENIDO PRINCIPAL -->
-  <main class="main-content">
-    
-    <header class="top-header">
-      <div class="user-profile">👤 Gabriel (OCI Certified)</div>
-    </header>
-
-    <section class="hero-section">
-      <h1>Organizador inteligente de contenido</h1>
-      <p>Sube tus archivos o apuntes para estructurarlos automáticamente.</p>
-
-      <div class="input-box">
-        <textarea id="texto-input" placeholder="Escribe tus apuntes aquí o sube tus archivos utilizando los botones de abajo..."></textarea>
+  <div class="app-container">
+    <!-- BARRA LATERAL (SIDEBAR) -->
+    <aside class="sidebar">
+      <div class="brand">
+        <svg class="brand-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+          <path d="M12 6a6 6 0 1 0 6 6 6 6 0 0 0-6-6zm0 10a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/>
+        </svg>
+        <h2>TechMind</h2>
       </div>
 
-      <div class="action-buttons">
-        <div class="icons">
-          <!-- Botón 1: Subir Archivo Local -->
-          <button type="button" class="icon-btn" id="btn-subir-local" title="Subir archivo desde la computadora">
-            <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
-          </button>
-          <!-- Selector de archivo oculto -->
-          <input type="file" id="input-archivo-oculto" accept=".txt,.md,.json" style="display: none;">
-
-          <!-- Botón 2: Google Drive -->
-          <button type="button" class="icon-btn" id="btn-drive" title="Importar de Google Drive">
-            <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12.01 1.485L3.393 16.12h4.588l8.617-14.635zm-2.07 16.12l-2.294 3.91h13.961l2.294-3.91zm10.372-1.485l-4.588-7.818L11.136 16.12z"/></svg>
-          </button>
-
-          <!-- Botón 3: Dropbox -->
-          <button type="button" class="icon-btn" id="btn-dropbox" title="Importar de Dropbox">
-            <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M6 2l6 3.75L18 2l4.5 3.75L16.5 9.5 22.5 13.25 18 17l-6-3.75L6 17l-4.5-3.75L7.5 9.5 1.5 5.75z"/></svg>
-          </button>
-        </div>
-
-        <button id="btn-clasificar" class="btn-primary">Clasificar</button>
+      <div class="historial">
+        <h3>HISTORIAL RECIENTE</h3>
+        <ul id="lista-historial">
+          <li>Algoritmos de clasif...</li>
+          <li>Modelado de datos, c...</li>
+          <li>Desarrollo de micros...</li>
+          <li>Diseño de interfaces...</li>
+        </ul>
       </div>
-    </section>
 
-    <!-- RESULTADOS DINÁMICOS -->
-    <section class="results-section">
-      <h2>Resultados del análisis en tiempo real</h2>
-
-      <div class="cards-container">
-        <div class="card">
-          <h4>CATEGORÍA:</h4>
-          <p id="res-categoria">---</p>
-        </div>
-
-        <div class="card">
-          <h4>CONFIANZA:</h4>
-          <p id="res-confianza">---</p>
-        </div>
-
-        <div class="card">
-          <h4>PALABRAS CLAVE:</h4>
-          <p id="res-palabras">---</p>
+      <div class="sidebar-footer">
+        <div class="status">
+          <span class="status-dot"></span>
+          Conectado a Oracle Cloud
         </div>
       </div>
-    </section>
+    </aside>
 
-  </main>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+      <!-- Encabezado superior -->
+      <header class="top-header">
+        <div class="user-badge">
+          <span class="user-icon">👤</span>
+          Gabriel (OCI Certified)
+        </div>
+      </header>
 
-  <!-- LÓGICA JAVASCRIPT -->
-  <script>
-    // --- 1. HISTORIAL DINÁMICO ---
-    document.addEventListener('DOMContentLoaded', () => {
-      actualizarVistaHistorial();
-    });
+      <!-- Título de la aplicación -->
+      <section class="hero-section">
+        <h1>Organizador inteligente de contenido</h1>
+        <p class="subtitle">Escribe tu contenido técnico o sube archivos para estructurarlos automáticamente.</p>
+      </section>
 
-    const btnClasificar = document.getElementById('btn-clasificar');
+      <!-- FORMULARIO PRINCIPAL (DOS COLUMNAS) -->
+      <section class="main-card">
+        <div class="form-container">
+          
+          <!-- Columna Izquierda: Campos de texto -->
+          <div class="inputs-column">
+            <div class="form-group">
+              <label for="doc-title">Título del documento</label>
+              <input 
+                type="text" 
+                id="doc-title" 
+                placeholder="Ej. Guía de implementación de autenticación OAuth 2.0"
+              >
+            </div>
 
-    btnClasificar.addEventListener('click', async () => {
-      const textoInput = document.getElementById('texto-input');
-      const texto = textoInput.value.trim();
+            <div class="form-group">
+              <label for="doc-text">Texto técnico</label>
+              <textarea 
+                id="doc-text" 
+                placeholder="Escribe tus apuntes aquí o pega tu contenido técnico..."
+              ></textarea>
+              <div class="char-count"><span id="char-num">0</span> caracteres</div>
+            </div>
+          </div>
 
-      if (!texto) {
-        alert("Por favor, ingresa un texto o sube un archivo antes de clasificar.");
-        return;
-      }
+          <!-- Divisor Central -->
+          <div class="divider">o</div>
 
-      try {
-        // Consultar al Backend (FastAPI)
-        const response = await fetch('http://localhost:8080/contenido', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            titulo: "Consulta desde Web UI", 
-            texto: texto 
-          })
-        });
+          <!-- Columna Derecha: Subida local de archivos y acción -->
+          <div class="action-column">
+            <div class="drop-zone" id="drop-zone">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <p class="drop-title">Subir archivo</p>
+              <p class="drop-subtitle">Arrastra o selecciona un archivo desde tu equipo<br>(PDF, DOCX, TXT · Máx. 20MB)</p>
+              <input type="file" id="file-input" hidden accept=".pdf,.docx,.txt,.csv">
+            </div>
 
-        if (!response.ok) throw new Error("Error al consultar el servidor");
+            <button id="btn-clasificar" class="btn-primary">Clasificar</button>
+          </div>
 
-        const data = await response.json();
+        </div>
+      </section>
 
-        // Actualizar tarjetas de resultados en pantalla
-        document.getElementById('res-categoria').innerText = data.categoria || "Backend";
-        
-        const porcentaje = data.probabilidad ? (data.probabilidad * 100).toFixed(0) + '%' : '89%';
-        document.getElementById('res-confianza').innerText = porcentaje;
-        
-        const tags = data.informacion_adicional 
-          ? data.informacion_adicional.map(tag => `#${tag}`).join(' ') 
-          : '#Java #SpringBoot';
-        document.getElementById('res-palabras').innerText = tags;
+      <!-- RESULTADOS DEL ANÁLISIS -->
+      <section class="results-section">
+        <h3>Resultados del análisis en tiempo real</h3>
+        <div class="cards-grid">
+          
+          <div class="card">
+            <h4>CATEGORÍA:</h4>
+            <div class="card-value" id="val-categoria">---</div>
+          </div>
 
-        // Guardar en la memoria del navegador para el Historial
-        guardarEnHistorial(texto);
+          <div class="card">
+            <h4>CONFIANZA:</h4>
+            <div class="card-value" id="val-confianza">---</div>
+          </div>
 
-      } catch (error) {
-        // Respuesta visual de respaldo si la API aún no está corriendo
-        console.warn("API no conectada aun, usando respuesta simulada para UI");
-        document.getElementById('res-categoria').innerText = "Backend";
-        document.getElementById('res-confianza').innerText = "92%";
-        document.getElementById('res-palabras').innerText = "#Java #APIRest #SpringBoot";
-        guardarEnHistorial(texto);
-      }
-    });
+          <div class="card">
+            <h4>PALABRAS CLAVE:</h4>
+            <div class="card-value" id="val-keywords">---</div>
+          </div>
 
-    function guardarEnHistorial(texto) {
-      let historial = JSON.parse(localStorage.getItem('techmind_historial')) || [];
-      const resumen = texto.length > 20 ? texto.substring(0, 20) + "..." : texto;
+        </div>
+      </section>
+    </main>
+  </div>
 
-      // Evitar duplicados seguidos y mantener máximo 5 items
-      if (historial[0] !== resumen) {
-        historial.unshift(resumen);
-      }
-      if (historial.length > 5) historial.pop();
+  <!-- SCRIPT DE DINAMISMO (CONTADOR DE CARACTERES Y EVENTOS DE INTERFAZ) -->
+<script>
+  // 1. Contador de caracteres en tiempo real
+  const textInput = document.getElementById('doc-text');
+  const charCounter = document.getElementById('char-num');
 
-      localStorage.setItem('techmind_historial', JSON.stringify(historial));
-      actualizarVistaHistorial();
+  textInput.addEventListener('input', () => {
+    charCounter.textContent = textInput.value.length;
+  });
+
+  // 2. Control para la zona de carga de archivos desde la computadora
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+
+  dropZone.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      const fileName = e.target.files[0].name;
+      document.querySelector('.drop-title').textContent = fileName;
+    }
+  });
+
+  // 3. CONEXIÓN REAL CON LA API DE CÉSAR (main.py)
+  const btnClasificar = document.getElementById('btn-clasificar');
+  const inputTitulo = document.getElementById('doc-title');
+  
+  const valCategoria = document.getElementById('val-categoria');
+  const valConfianza = document.getElementById('val-confianza');
+  const valKeywords = document.getElementById('val-keywords');
+
+  btnClasificar.addEventListener('click', async () => {
+    const titulo = inputTitulo.value.trim();
+    const texto = textInput.value.trim();
+
+    if (!titulo && !texto) {
+      alert("Por favor, ingresa un título o un texto para analizar.");
+      return;
     }
 
-    function actualizarVistaHistorial() {
-      const ul = document.getElementById('lista-historial');
-      ul.innerHTML = '';
+    // Estado visual de carga
+    btnClasificar.textContent = "Procesando...";
+    btnClasificar.disabled = true;
 
-      const historial = JSON.parse(localStorage.getItem('techmind_historial')) || [];
-
-      if (historial.length === 0) {
-        ul.innerHTML = '<li style="opacity:0.5; cursor:default;">Sin consultas recientes</li>';
-        return;
-      }
-
-      historial.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item;
-        // Al hacer clic en un item del historial, se vuelve a cargar en el cuadro
-        li.addEventListener('click', () => {
-          document.getElementById('texto-input').value = item.replace('...', '');
-        });
-        ul.appendChild(li);
+    try {
+      // Petición HTTP POST al servidor local levantado por main.py
+      const response = await fetch('http://127.0.0.1:8000/contenido', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          titulo: titulo,
+          texto: texto
+        })
       });
+
+      if (!response.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
+
+      const data = await response.json();
+
+      // Inyección de los datos calculados por el modelo de César en la interfaz
+      valCategoria.textContent = data.categoria || "No clasificado";
+      valConfianza.textContent = data.probabilidad ? `${(data.probabilidad * 100).toFixed(0)}%` : "---";
+      valKeywords.textContent = Array.isArray(data.informacion_adicional) 
+        ? data.informacion_adicional.join(", ") 
+        : (data.informacion_adicional || "---");
+
+    } catch (error) {
+      console.error("Error al conectar con el Backend:", error);
+      alert("No se pudo conectar con el servidor Backend (main.py). Asegúrate de que esté ejecutándose.");
+    } finally {
+      btnClasificar.textContent = "Clasificar";
+      btnClasificar.disabled = false;
     }
+  });
+</script>
 
-    // --- 2. ACCIÓN DE LOS BOTONES DE SUBIDA ---
-
-    // A) Botón Archivo Local
-    const btnSubirLocal = document.getElementById('btn-subir-local');
-    const inputArchivoOculto = document.getElementById('input-archivo-oculto');
-
-    btnSubirLocal.addEventListener('click', () => {
-      inputArchivoOculto.click(); // Dispara la ventana para seleccionar archivo
-    });
-
-    inputArchivoOculto.addEventListener('change', (e) => {
-      const archivo = e.target.files[0];
-      if (!archivo) return;
-
-      const lector = new FileReader();
-      lector.onload = function(evento) {
-        document.getElementById('texto-input').value = evento.target.result;
-      };
-      lector.readAsText(archivo);
-    });
-
-    // B) Botón Google Drive
-    document.getElementById('btn-drive').addEventListener('click', () => {
-      document.getElementById('texto-input').value = "Configuración de infraestructura en Oracle Cloud Infrastructure OCI y despliegue de contenedores Docker.";
-      alert("☁️ Documento importado desde Google Drive con éxito.");
-    });
-
-    // C) Botón Dropbox
-    document.getElementById('btn-dropbox').addEventListener('click', () => {
-      document.getElementById('texto-input').value = "Diseño de interfaces de usuario responsive con HTML CSS Tailwind y pruebas de usabilidad UX UI en Figma.";
-      alert("📦 Documento importado desde Dropbox con éxito.");
-    });
-  </script>
 </body>
 </html>
