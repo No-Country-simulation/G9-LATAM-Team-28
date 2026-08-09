@@ -1,0 +1,177 @@
+/* Reset general */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  background-color: #000;
+  color: #fff;
+}
+
+/* Sidebar izquierda */
+.sidebar {
+  width: 260px;
+  background-color: #050505;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.historial h3 {
+  font-size: 0.9rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.historial ul {
+  list-style: none;
+}
+
+.historial li {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+}
+
+.status {
+  font-size: 0.75rem;
+  color: #00ff88;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: #00ff88;
+  border-radius: 50%;
+}
+
+/* Área Principal con Degradado */
+.main-content {
+  flex: 1;
+  background: linear-gradient(135deg, #4c1d95 0%, #be185d 100%);
+  padding: 2rem 4rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-profile {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.hero-section h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-section p {
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+}
+
+.input-box textarea {
+  width: 100%;
+  height: 90px;
+  border-radius: 20px;
+  border: none;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  outline: none;
+  resize: none;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 1rem;
+}
+
+.icons {
+  display: flex;
+  gap: 12px;
+}
+
+.icon-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #4c1d95;
+  color: white;
+  border: none;
+  padding: 10px 40px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Resultados */
+.results-section {
+  margin-top: 3rem;
+}
+
+.results-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.cards-container {
+  display: flex;
+  gap: 20px;
+}
+
+.card {
+  flex: 1;
+  background: rgba(244, 114, 182, 0.8); /* Rosa translúcido */
+  padding: 1.5rem;
+  border-radius: 15px;
+  color: #fff;
+}
+
+.card h4 {
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  margin-bottom: 0.8rem;
+  opacity: 0.9;
+}
+
+.card p {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
