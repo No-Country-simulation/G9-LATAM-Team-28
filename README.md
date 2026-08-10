@@ -9,13 +9,61 @@ Organizador Inteligente de Contenido Técnico
 
 TechMind es un MVP desarrollado para organizar contenido técnico mediante técnicas de Ciencia de Datos, Machine Learning y una API REST construida con FastAPI.
 
-## Tecnologías
+## Tecnologías usadas en el proyecto
 
-- Python
-- Pandas
-- Scikit-Learn
-- FastAPI
-- Oracle Cloud Infrastructure (OCI)
+### Entrenamiento del Modelo
+
+| Nombre | Versión | Descripción y Rol en el Notebook |
+| :--- | :--- | :--- |
+| **Scikit-Learn** | `1.6.1` | Biblioteca principal de Machine Learning y NLP. Utilizada en todo el ciclo de modelado: división de datos (`train_test_split`), extracción de características TF-IDF (`TfidfVectorizer`), modelos (`LogisticRegression`, `MultinomialNB`), empaquetado (`Pipeline`), validación cruzada (`StratifiedKFold`), búsqueda de hiperparámetros (`GridSearchCV`) y métricas (`classification_report`, `confusion_matrix`, `accuracy_score`). |
+| **Pandas** | `3.0.5` | Carga del dataset original (`Online_Courses.csv`), limpieza de datos, filtrado de columnas redundantes (`Unnamed: 0`), manejo de valores nulos, agregación y transformación de variables textuales para el modelo. |
+| **NumPy** | `2.5.1` | Manejo de estructuras de datos matriciales, cálculo numérico de probabilidades (`np.max`), evaluación de métricas y transformaciones numéricas de los arrays de predicción. |
+| **Matplotlib** | *Integrada / Ecosistema Python* | Generación y personalización de figuras gráficas para el Análisis Exploratorio de Datos (EDA), distribución de categorías y visualización de la matriz de confusión. |
+| **Seaborn** | *Integrada / Ecosistema Python* | Visualización de datos estadísticos de alto nivel, utilizada para estilar gráficos de distribución y renderizar mapas de calor (`heatmap`) de la matriz de confusión. |
+| **Joblib** | `1.5.3` | Serialización y exportación del Pipeline final óptimo al archivo binario `modelo_clasificador_cursos_udemy.pkl` para su posterior consumo en producción mediante la API. |
+| **Google Colab (`files`)** | *Entorno Google Colab* | Herramienta de utilidad para la descarga y exportación directa del archivo binario del modelo generado en la nube de Google Colab. |
+
+
+
+#### Componentes y Módulos Clave de `scikit-learn`
+
+| Módulo / Componente | Propósito en el Notebook |
+| :--- | :--- |
+| **`TfidfVectorizer`** | Convierte las descripciones y títulos de los cursos en vectores numéricos ponderados por TF-IDF (`max_features=5000`, `ngram_range=(1,2)`). |
+| **`LogisticRegression`** | Modelo clasificador final optimizado (`C=10.0`, regularización L2) que obtuvo el mejor rendimiento en la clasificación multiclase. |
+| **`MultinomialNB`** | Modelo probabilístico Naive Bayes evaluado como clasificador base de referencia. |
+| **`Pipeline`** | Encapsula el vectorizador TF-IDF y el clasificador en un único flujo de inferencia reproducible. |
+| **`StratifiedKFold` & `cross_val_score`** | Realiza validación cruzada manteniendo la proporción de clases balanceada en cada partición (Fold). |
+| **`GridSearchCV`** | Búsqueda sistemática de los mejores hiperparámetros evaluando múltiples combinaciones (`C`, `ngram_range`, `max_features`). |
+| **`confusion_matrix` & `classification_report`** | Cálculo detallado de métricas de desempeño: Exactitud (Accuracy), Precisión (Precision), Sensibilidad (Recall) y Puntuación F1 (F1-Score). |
+
+
+
+### Librerías usadas en la aplicación que expone el modelo vía API
+
+| Nombre | Versión | Descripción de la librería |
+| :--- | :--- | :--- |
+| **FastAPI** | `0.139.2` | Framework web moderno y de alto rendimiento para construir la API REST, servir la interfaz HTML y gestionar los endpoints `/` y `/classify`. |
+| **Uvicorn** | `0.51.0` | Servidor ASGI rápido y ligero utilizado para ejecutar, desplegar y servir la aplicación FastAPI en local y producción. |
+| **Scikit-Learn** | `1.6.1` | Biblioteca de Machine Learning utilizada por el pipeline del modelo para la vectorización de texto (TF-IDF), cálculo de probabilidades de pertenencia y predicción/clasificación de los contenidos. |
+| **Joblib** | `1.5.3` | Herramienta de serialización utilizada para cargar en memoria el modelo entrenado (`modelo_clasificador_cursos_udemy.pkl`). |
+| **NumPy** | `2.5.1` | Biblioteca de computación científica para manejo de matrices y arrays, utilizada para ordenar pesos TF-IDF (`np.argsort`), extraer palabras clave y calcular el porcentaje de confianza (`np.max`). |
+| **PyPDF** | `6.15.0` | Librería para lectura y extracción de texto estructurado a partir de documentos en formato PDF (`.pdf`). |
+| **Python-Docx** | `1.2.0` | Librería para la lectura, extracción y procesamiento de párrafos de texto desde documentos de Microsoft Word (`.docx`). |
+| **Python-Multipart** | `0.0.32` | Módulo requerido por FastAPI para procesar y parsear peticiones `multipart/form-data` (envío de archivos `UploadFile` y datos de formulario `Form`). |
+| **Starlette** | `1.3.1` | Toolkit ASGI fundamental que subyace a FastAPI; provee el middleware CORS (`CORSMiddleware`), respuestas HTML (`HTMLResponse`) y manejo de excepciones HTTP. |
+| **Pydantic** | `2.13.4` | Biblioteca de validación de datos y análisis de tipos empleada por FastAPI para la estructura y validación de las solicitudes. |
+| **Pandas** | `3.0.5` | Biblioteca para análisis y manipulación de datos tabulares, base para el tratamiento de los datos de cursos y entrenamiento del modelo. |
+| **Pillow (PIL)** | *Opcional / Integrada* | Biblioteca de procesamiento de imágenes utilizada en `main.py` (`PIL.Image`) para la apertura y manipulación de imágenes antes del procesamiento OCR. |
+
+
+
+# Instalación y Ejecución de la solución en local
+- [instalacion-y-ejecucion.md](instalacion-y-ejecucion.md)
+
+# Producción
+- enlaces...
+
 
 ## Estado del proyecto
 
