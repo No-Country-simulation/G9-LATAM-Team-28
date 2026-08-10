@@ -228,3 +228,5 @@ __pycache__/
 
 # Archivos del sistema
 .DS_Store
+
+techmind-backend/target
