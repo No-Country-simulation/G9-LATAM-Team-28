@@ -1,5 +1,7 @@
 package com.techmind.service;
 
+import com.techmind.dto.ContenidoResponse;
+import com.techmind.dto.MlHealthResponse;
 import com.techmind.entity.Contenido;
 import com.techmind.repository.ContenidoRepository;
 import org.springframework.stereotype.Service;
@@ -16,30 +18,40 @@ public class MlService {
         this.contenidoRepository = contenidoRepository;
     }
 
-    public MlServiceClient.MlClassificationResponse clasificarYGuardar(
+    public MlHealthResponse obtenerSaludServicio() {
+        return mlClient.checkHealth();
+    }
+
+    public ContenidoResponse clasificarYGuardar(
             String titulo,
             String texto,
             MultipartFile archivo,
-            Long userId
-    ) {
-        // 1. Llamar al microservicio Python
-        MlServiceClient.MlClassificationResponse resultado =
-                mlClient.classify(titulo, texto, archivo);
+            Long userId) {
+        // 1. Llamar al microservicio Python / ML
+        MlServiceClient.MlClassificationResponse resultado = mlClient.classify(titulo, texto, archivo);
 
-        // 2. Guardar en PostgreSQL
+        // 2. Crear y guardar entidad en PostgreSQL si hay repositorio disponible
         Contenido contenido = new Contenido();
-        contenido.setTitulo(titulo != null ? titulo : "Sin título");
+        contenido.setTitulo(titulo != null && !titulo.isBlank() ? titulo : "Sin titulo");
         contenido.setTexto(texto);
         contenido.setCategoria(resultado.categoria());
         contenido.setConfianza(resultado.confianza());
 
-        if (resultado.palabrasClave() != null) {
+        if (resultado.palabrasClave() != null && !resultado.palabrasClave().isEmpty()) {
             contenido.setPalabrasClave(String.join(", ", resultado.palabrasClave()));
         }
 
-        contenido.setUserId(userId);
+        if (userId != null) {
+            contenido.setUserId(userId);
+        }
+
         contenidoRepository.save(contenido);
 
-        return resultado;
+        // 3. Devolver DTO estandarizado
+        return new ContenidoResponse(
+                resultado.categoria(),
+                resultado.confianza(),
+                resultado.calcularProbabilidad(),
+                resultado.palabrasClave());
     }
 }

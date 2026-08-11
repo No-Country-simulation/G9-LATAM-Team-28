@@ -1,177 +1,322 @@
-/* Reset general */
+/* TECHMIND - ESTILOS BASE, UTILIDADES Y TEMA CLARO (LIGHT MODE) */
+@import "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-body {
-  display: flex;
-  height: 100vh;
-  background-color: #000;
-  color: #fff;
+/* Personalización de Barra de Desplazamiento */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-/* Sidebar izquierda */
-.sidebar {
-  width: 260px;
-  background-color: #050505;
-  padding: 2rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+::-webkit-scrollbar-track {
+  background: rgba(5, 11, 20, 0.8);
 }
 
-.logo h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
+::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 3px;
 }
 
-.historial h3 {
-  font-size: 0.9rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.6);
 }
 
-.historial ul {
-  list-style: none;
+/* Animaciones de resplandor */
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  }
 }
 
-.historial li {
-  font-size: 0.85rem;
-  color: #ccc;
-  margin-bottom: 0.8rem;
-  cursor: pointer;
+.glow-active {
+  animation: pulseGlow 3s infinite ease-in-out;
 }
 
-.status {
-  font-size: 0.75rem;
-  color: #00ff88;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* ==========================================================================
+   ESTILOS PERFECCIONADOS DE TEMA CLARO (LIGHT THEME OVERRIDES)
+   ========================================================================== */
+
+body.light-mode {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f8fafc 100%) !important;
+  color: #0f172a !important;
 }
 
-.dot {
-  width: 8px;
-  height: 8px;
-  background-color: #00ff88;
-  border-radius: 50%;
+/* Sidebar en Modo Claro */
+body.light-mode #mobileSidebar {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 4px 0 20px rgba(148, 163, 184, 0.15) !important;
 }
 
-/* Área Principal con Degradado */
-.main-content {
-  flex: 1;
-  background: linear-gradient(135deg, #4c1d95 0%, #be185d 100%);
-  padding: 2rem 4rem;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+/* Cabecera Móvil y Escritorio en Modo Claro */
+body.light-mode header {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 4px 20px rgba(148, 163, 184, 0.15) !important;
 }
 
-.top-header {
-  display: flex;
-  justify-content: flex-end;
+body.light-mode header input {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
 }
 
-.user-profile {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 0.9rem;
+body.light-mode header kbd {
+  background-color: #f1f5f9 !important;
+  color: #64748b !important;
+  border-color: #cbd5e1 !important;
 }
 
-/* Hero Section */
-.hero-section {
-  text-align: center;
-  margin-top: 1rem;
+body.light-mode header .bg-slate-950 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
 }
 
-.hero-section h1 {
-  font-size: 2.2rem;
-  margin-bottom: 0.5rem;
+/* Tarjetas Principales, Secciones y Contenedores */
+body.light-mode .bg-slate-900\/80,
+body.light-mode .bg-slate-900\/90,
+body.light-mode .bg-slate-950\/95,
+body.light-mode .bg-slate-950\/80,
+body.light-mode .bg-slate-900 {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 25px -5px rgba(148, 163, 184, 0.2) !important;
 }
 
-.hero-section p {
-  opacity: 0.9;
-  margin-bottom: 1.5rem;
+body.light-mode .bg-slate-950 {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
 }
 
-.input-box textarea {
-  width: 100%;
-  height: 90px;
-  border-radius: 20px;
-  border: none;
-  padding: 1rem 1.5rem;
-  font-size: 0.95rem;
-  outline: none;
-  resize: none;
+/* Textos y Títulos en Modo Claro */
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4,
+body.light-mode label,
+body.light-mode .text-white,
+body.light-mode .text-slate-100,
+body.light-mode .text-slate-200 {
+  color: #0f172a !important;
 }
 
-.action-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  margin-top: 1rem;
+body.light-mode .text-slate-300,
+body.light-mode .text-slate-400 {
+  color: #334155 !important;
 }
 
-.icons {
-  display: flex;
-  gap: 12px;
+body.light-mode .text-slate-500 {
+  color: #64748b !important;
 }
 
-.icon-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
+/* Badges e Indicadores de Estado y Porcentaje en Modo Claro */
+body.light-mode .bg-emerald-950\/60,
+body.light-mode .bg-emerald-950\/80,
+body.light-mode .bg-emerald-950,
+body.light-mode [class*="bg-emerald-"] {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #065f46 !important;
 }
 
-.btn-primary {
-  background-color: #4c1d95;
-  color: white;
-  border: none;
-  padding: 10px 40px;
-  border-radius: 20px;
-  font-weight: bold;
-  cursor: pointer;
+body.light-mode .bg-emerald-950\/60 *,
+body.light-mode .bg-emerald-950\/80 *,
+body.light-mode .bg-emerald-950 *,
+body.light-mode [class*="bg-emerald-"] * {
+  color: #065f46 !important;
 }
 
-/* Resultados */
-.results-section {
-  margin-top: 3rem;
+body.light-mode .bg-cyan-950\/60,
+body.light-mode .bg-cyan-950 {
+  background-color: #f0fdf4 !important;
+  border-color: #bae6fd !important;
 }
 
-.results-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
+body.light-mode .bg-amber-950\/60,
+body.light-mode .bg-amber-950 {
+  background-color: #fffbeb !important;
+  border-color: #fde68a !important;
 }
 
-.cards-container {
-  display: flex;
-  gap: 20px;
+body.light-mode .bg-rose-950\/60,
+body.light-mode .bg-rose-950 {
+  background-color: #fff1f2 !important;
+  border-color: #fecdd3 !important;
 }
 
-.card {
-  flex: 1;
-  background: rgba(244, 114, 182, 0.8); /* Rosa translúcido */
-  padding: 1.5rem;
-  border-radius: 15px;
-  color: #fff;
+/* Colores de Texto de Colores en Modo Claro */
+body.light-mode .text-cyan-300,
+body.light-mode .text-cyan-400 {
+  color: #0284c7 !important;
 }
 
-.card h4 {
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  margin-bottom: 0.8rem;
-  opacity: 0.9;
+body.light-mode .text-emerald-400 {
+  color: #059669 !important;
 }
 
-.card p {
-  font-size: 1.1rem;
-  font-weight: bold;
+body.light-mode .text-amber-400 {
+  color: #d97706 !important;
+}
+
+body.light-mode .text-rose-400 {
+  color: #e11d48 !important;
+}
+
+/* Botones de Navegación Lateral */
+body.light-mode .navModuleBtn,
+body.light-mode aside a {
+  color: #334155 !important;
+}
+
+body.light-mode aside a:hover,
+body.light-mode .navModuleBtn:hover {
+  background-color: #f1f5f9 !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .bg-cyan-500\/20 {
+  background-color: #e0f2fe !important;
+  border-color: #7dd3fc !important;
+  color: #0369a1 !important;
+}
+
+/* Pill de Header "Página Actual" */
+body.light-mode #activeModuleHeaderTitle {
+  background-color: #e0f2fe !important;
+  color: #0369a1 !important;
+  border-color: #7dd3fc !important;
+}
+
+/* Botones Principales y Secundarios */
+body.light-mode #btnSubmit,
+body.light-mode .bg-cyan-500 {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3) !important;
+}
+
+body.light-mode #btnSubmit:hover,
+body.light-mode .bg-cyan-500:hover {
+  background-color: #0369a1 !important;
+}
+
+body.light-mode #openTestsBtn,
+body.light-mode .btnSample,
+body.light-mode #viewJsonBtn {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode #openTestsBtn:hover,
+body.light-mode .btnSample:hover,
+body.light-mode #viewJsonBtn:hover {
+  background-color: #e0f2fe !important;
+  border-color: #7dd3fc !important;
+}
+
+/* Inputs y Textareas */
+body.light-mode input[type="text"],
+body.light-mode input[type="email"],
+body.light-mode input[type="password"],
+body.light-mode textarea,
+body.light-mode select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+body.light-mode input::placeholder,
+body.light-mode textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+body.light-mode input:focus,
+body.light-mode textarea:focus,
+body.light-mode select:focus {
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+}
+
+/* Zona DropZone */
+body.light-mode #dropZone {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+body.light-mode #dropZone:hover {
+  background-color: #e0f2fe !important;
+  border-color: #0284c7 !important;
+}
+
+/* Modales y Consolas de Código */
+body.light-mode #jsonModal > div,
+body.light-mode #testsModal > div {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 25px 50px -12px rgba(148, 163, 184, 0.35) !important;
+}
+
+body.light-mode #jsonContent,
+body.light-mode #testConsole {
+  background-color: #0f172a !important;
+  color: #38bdf8 !important;
+  border-color: #1e293b !important;
+}
+
+/* Divisores de Línea */
+body.light-mode .border-cyan-500/20,
+body.light-mode .border-cyan-500/30,
+body.light-mode .border-slate-800 {
+  border-color: #e2e8f0 !important;
+}
+
+/* ==========================================================================
+   AJUSTES ESPECÍFICOS DE CONTRASTE EN MODO CLARO
+   ========================================================================== */
+
+/* Botones de Porcentaje y Tokens (Explicabilidad / Recomendaciones / Dashboard): Fondo verde claro, letras verde oscuro */
+body.light-mode #featureImportanceTokens .feature-token-pill,
+body.light-mode #featureImportanceTokens > span {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #065f46 !important;
+}
+
+body.light-mode #featureImportanceTokens .feature-token-pill > span,
+body.light-mode #featureImportanceTokens > span > span:first-child {
+  color: #065f46 !important;
+}
+
+body.light-mode #featureImportanceTokens .feature-token-badge,
+body.light-mode #featureImportanceTokens > span > span:last-child {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+
+/* Botón Limpiar Registro (Historial): Fondo rojo y texto blanco */
+body.light-mode #clearHistoryBtn {
+  background-color: #e11d48 !important;
+  color: #ffffff !important;
+  border-color: #be123c !important;
+}
+
+body.light-mode #clearHistoryBtn i {
+  color: #ffffff !important;
+}
+
+body.light-mode #clearHistoryBtn:hover {
+  background-color: #be123c !important;
+  color: #ffffff !important;
 }
