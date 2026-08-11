@@ -230,3 +230,4 @@ __pycache__/
 .DS_Store
 
 techmind-backend/target
+model-ml/.venv
