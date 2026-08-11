@@ -119,11 +119,21 @@ body.light-mode .text-slate-500 {
   color: #64748b !important;
 }
 
-/* Badges e Indicadores de Estado en Modo Claro */
+/* Badges e Indicadores de Estado y Porcentaje en Modo Claro */
 body.light-mode .bg-emerald-950\/60,
-body.light-mode .bg-emerald-950 {
+body.light-mode .bg-emerald-950\/80,
+body.light-mode .bg-emerald-950,
+body.light-mode [class*="bg-emerald-"] {
   background-color: #ecfdf5 !important;
   border-color: #a7f3d0 !important;
+  color: #065f46 !important;
+}
+
+body.light-mode .bg-emerald-950\/60 *,
+body.light-mode .bg-emerald-950\/80 *,
+body.light-mode .bg-emerald-950 *,
+body.light-mode [class*="bg-emerald-"] * {
+  color: #065f46 !important;
 }
 
 body.light-mode .bg-cyan-950\/60,
@@ -269,4 +279,44 @@ body.light-mode .border-cyan-500/20,
 body.light-mode .border-cyan-500/30,
 body.light-mode .border-slate-800 {
   border-color: #e2e8f0 !important;
+}
+
+/* ==========================================================================
+   AJUSTES ESPECÍFICOS DE CONTRASTE EN MODO CLARO
+   ========================================================================== */
+
+/* Botones de Porcentaje y Tokens (Explicabilidad / Recomendaciones / Dashboard): Fondo verde claro, letras verde oscuro */
+body.light-mode #featureImportanceTokens .feature-token-pill,
+body.light-mode #featureImportanceTokens > span {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #065f46 !important;
+}
+
+body.light-mode #featureImportanceTokens .feature-token-pill > span,
+body.light-mode #featureImportanceTokens > span > span:first-child {
+  color: #065f46 !important;
+}
+
+body.light-mode #featureImportanceTokens .feature-token-badge,
+body.light-mode #featureImportanceTokens > span > span:last-child {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+  border-color: #a7f3d0 !important;
+}
+
+/* Botón Limpiar Registro (Historial): Fondo rojo y texto blanco */
+body.light-mode #clearHistoryBtn {
+  background-color: #e11d48 !important;
+  color: #ffffff !important;
+  border-color: #be123c !important;
+}
+
+body.light-mode #clearHistoryBtn i {
+  color: #ffffff !important;
+}
+
+body.light-mode #clearHistoryBtn:hover {
+  background-color: #be123c !important;
+  color: #ffffff !important;
 }
