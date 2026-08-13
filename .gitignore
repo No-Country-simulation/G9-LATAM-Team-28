@@ -231,3 +231,4 @@ __pycache__/
 
 techmind-backend/target
 model-ml/.venv
+frontend-backend/techmind-backend/target
