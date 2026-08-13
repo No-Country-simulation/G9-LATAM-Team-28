@@ -126,7 +126,7 @@
       </div>
 
       <div class="relative max-w-sm w-full">
-        <input type="text" placeholder="Buscar endpoints, JSON o tokens (⌘K)..."
+        <input type="text" id="globalHeaderSearch" placeholder="Buscar documentos en BD (⌘K + Enter)..."
           class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
         <kbd class="absolute right-2.5 top-2 text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded">⌘K</kbd>
@@ -271,6 +271,22 @@
       showToast("Copiado al portapapeles.", "success");
     });
 
+    const globalHeaderSearch = document.getElementById('globalHeaderSearch');
+    if (globalHeaderSearch) {
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          globalHeaderSearch.focus();
+        }
+      });
+      globalHeaderSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const q = globalHeaderSearch.value.trim();
+          if (q) window.location.href = `recomendaciones.html?query=${encodeURIComponent(q)}`;
+        }
+      });
+    }
+
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMobileMenu = document.getElementById('closeMobileMenu');
     const mobileSidebar = document.getElementById('mobileSidebar');
@@ -282,3 +298,4 @@
 </body>
 
 </html>
+

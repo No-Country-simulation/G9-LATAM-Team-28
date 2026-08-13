@@ -104,7 +104,7 @@
       </div>
 
       <div class="relative max-w-sm w-full">
-        <input type="text" placeholder="Buscar en historial guardado (⌘K)..."
+        <input type="text" id="globalHeaderSearch" placeholder="Buscar documentos en BD (⌘K + Enter)..."
           class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
         <kbd class="absolute right-2.5 top-2 text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded">⌘K</kbd>
@@ -187,22 +187,53 @@
     });
     if (localStorage.getItem('theme') === 'light') setTheme(true);
 
-    function obtenerHistorial() {
-      try {
-        return JSON.parse(localStorage.getItem('techmind_history')) || [
-          { titulo: "Spring Boot REST API Best Practices", categoria: "Backend Development", fecha: "Hoy, 14:20" },
-          { titulo: "Despliegue OCI Compute & Docker", categoria: "Cloud Computing & OCI", fecha: "Ayer, 18:45" },
-          { titulo: "Scikit-Learn NLP Pipeline Model", categoria: "Data Science & AI", fecha: "Hace 2 días" }
-        ];
-      } catch (e) { return []; }
-    }
+    async function renderizarHistorial() {
+      historialListGrid.innerHTML = `
+        <div class="col-span-2 text-center py-10 text-cyan-400 font-semibold text-xs animate-pulse">
+          <i class="fa-solid fa-spinner fa-spin mr-2"></i>Consultando historial desde base de datos PostgreSQL...
+        </div>
+      `;
+      
+      let items = [];
+      const token = localStorage.getItem('techmind_token');
+      const headers = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
 
-    function renderizarHistorial() {
-      const items = obtenerHistorial();
+      try {
+        const res = await fetch('/contenido/historial', { headers });
+        if (res.ok) {
+          const apiData = await res.json();
+          if (Array.isArray(apiData)) {
+            items = apiData.map(item => ({
+              id: item.id,
+              titulo: item.titulo || "Sin título",
+              texto: item.texto || "",
+              categoria: item.categoria || "General",
+              confianza: item.confianza || "95%",
+              palabrasClave: item.palabrasClave || [],
+              fecha: item.createdAt ? new Date(item.createdAt).toLocaleString('es-ES', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : "Reciente"
+            }));
+          }
+        }
+      } catch (e) {
+        console.warn("Error al conectar con la API de historial:", e);
+      }
+
       historialListGrid.innerHTML = '';
 
-      if (!items.length) {
-        historialListGrid.innerHTML = `<p class="text-xs text-slate-400 col-span-2 text-center py-6">No hay consultas registradas en el historial.</p>`;
+      if (!items || items.length === 0) {
+        historialListGrid.innerHTML = `
+          <div class="col-span-2 text-center py-10 bg-slate-900/60 rounded-2xl border border-cyan-500/20 p-8 space-y-3">
+            <div class="w-12 h-12 rounded-full bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto text-xl">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <h4 class="text-sm font-bold text-slate-200">No hay consultas registradas en la base de datos</h4>
+            <p class="text-xs text-slate-400 max-w-md mx-auto">Tus análisis e inferencias guardados en PostgreSQL aparecerán aquí automáticamente.</p>
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition-all mt-2">
+              <i class="fa-solid fa-bolt"></i> Crear Primer Análisis
+            </a>
+          </div>
+        `;
         return;
       }
 
@@ -210,24 +241,65 @@
         const div = document.createElement('div');
         div.className = 'flex items-start justify-between p-4 rounded-xl bg-slate-950/80 border border-cyan-500/20 hover:border-cyan-500/50 transition-all shadow-md group';
         div.innerHTML = `
-          <div class="flex items-start gap-3">
-            <i class="fa-regular fa-file-lines text-cyan-400 text-lg mt-0.5"></i>
-            <div>
-              <h4 class="text-xs font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">${item.titulo}</h4>
+          <div class="flex items-start gap-3 flex-1 min-w-0 pr-3">
+            <i class="fa-regular fa-file-lines text-cyan-400 text-lg mt-1 shrink-0"></i>
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-2 mb-1 flex-wrap">
+                <span class="text-[10px] text-cyan-300 bg-cyan-950 border border-cyan-500/30 px-2 py-0.5 rounded font-mono"><i class="fa-solid fa-database mr-1"></i>BD PostgreSQL</span>
+                <span class="text-[10px] text-emerald-400 bg-emerald-950 border border-emerald-500/30 px-2 py-0.5 rounded font-bold">${item.confianza}</span>
+              </div>
+              <h4 class="text-xs font-bold text-slate-100 group-hover:text-cyan-300 transition-colors truncate">${item.titulo}</h4>
               <span class="text-[10px] text-slate-400 block mt-0.5">${item.categoria} • ${item.fecha}</span>
             </div>
           </div>
-          <a href="index.html" class="text-[11px] font-bold text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1">Cargar <i class="fa-solid fa-arrow-right text-[10px]"></i></a>
+          <button type="button" onclick="reintentarInferencia('${encodeURIComponent(item.titulo)}', '${encodeURIComponent(item.texto)}')" 
+            class="text-[11px] font-bold text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1 shrink-0 cursor-pointer pt-1">
+            Cargar <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
         `;
         historialListGrid.appendChild(div);
       });
     }
 
-    document.getElementById('clearHistoryBtn')?.addEventListener('click', () => {
+    function reintentarInferencia(tituloEnc, textoEnc) {
+      const titulo = decodeURIComponent(tituloEnc);
+      const texto = decodeURIComponent(textoEnc);
+      localStorage.setItem('techmind_sample_title', titulo);
+      localStorage.setItem('techmind_sample_text', texto);
+      window.location.href = "index.html";
+    }
+
+    document.getElementById('clearHistoryBtn')?.addEventListener('click', async () => {
+      const token = localStorage.getItem('techmind_token');
+      const headers = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      try {
+        await fetch('/contenido/historial', { method: 'DELETE', headers });
+        showToast("Historial eliminado de la base de datos.", "success");
+      } catch (e) {
+        showToast("Error al vaciar el historial en la BD.", "error");
+      }
+
       localStorage.removeItem('techmind_history');
-      renderizarHistorial();
-      showToast("Historial limpiado.", "info");
+      await renderizarHistorial();
     });
+
+    const globalHeaderSearch = document.getElementById('globalHeaderSearch');
+    if (globalHeaderSearch) {
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          globalHeaderSearch.focus();
+        }
+      });
+      globalHeaderSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const q = globalHeaderSearch.value.trim();
+          if (q) window.location.href = `recomendaciones.html?query=${encodeURIComponent(q)}`;
+        }
+      });
+    }
 
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMobileMenu = document.getElementById('closeMobileMenu');
@@ -242,3 +314,5 @@
 </body>
 
 </html>
+
+

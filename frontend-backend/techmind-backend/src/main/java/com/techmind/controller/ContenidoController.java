@@ -1,11 +1,15 @@
 package com.techmind.controller;
 
+import com.techmind.dto.ContenidoHistoryDto;
 import com.techmind.dto.ContenidoRequest;
 import com.techmind.dto.ContenidoResponse;
 import com.techmind.dto.MlHealthResponse;
+import com.techmind.entity.User;
+import com.techmind.repository.UserRepository;
 import com.techmind.service.MlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,19 +17,37 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/contenido")
 @CrossOrigin(origins = "*")
-@Tag(name = "Clasificacion de Contenido", description = "Endpoints para clasificar texto y archivos mediante el modelo de Machine Learning")
+@Tag(name = "Clasificacion de Contenido", description = "Endpoints para clasificar texto, archivos, historial y búsquedas")
 public class ContenidoController {
 
     private final MlService mlService;
+    private final UserRepository userRepository;
 
-    public ContenidoController(MlService mlService) {
+    public ContenidoController(MlService mlService, UserRepository userRepository) {
         this.mlService = mlService;
+        this.userRepository = userRepository;
+    }
+
+    private Long getUserIdFromSecurity() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth != null && auth.getPrincipal() instanceof UserDetails userDetails) {
+                String email = userDetails.getUsername();
+                return userRepository.findByEmail(email).map(User::getId).orElse(null);
+            }
+        } catch (Exception ignored) {}
+        return null;
     }
 
     @GetMapping("/ml-health")
@@ -45,16 +67,18 @@ public class ContenidoController {
             @ApiResponse(responseCode = "400", description = "Cuerpo de solicitud invalido o sin contenido de texto", content = @Content)
     })
     public ResponseEntity<ContenidoResponse> clasificarJson(@RequestBody ContenidoRequest request) {
-        if (request == null || (request.getTexto() == null || request.getTexto().trim().isEmpty())
-                && (request.getTitulo() == null || request.getTitulo().trim().isEmpty())) {
+        if (request == null || ((request.getTexto() == null || request.getTexto().trim().isEmpty())
+                && (request.getTitulo() == null || request.getTitulo().trim().isEmpty()))) {
             return ResponseEntity.badRequest().build();
         }
+
+        Long userId = getUserIdFromSecurity();
 
         ContenidoResponse response = mlService.clasificarYGuardar(
                 request.getTitulo(),
                 request.getTexto(),
                 null,
-                null);
+                userId);
 
         return ResponseEntity.ok(response);
     }
@@ -75,12 +99,42 @@ public class ContenidoController {
             return ResponseEntity.badRequest().build();
         }
 
+        Long userId = getUserIdFromSecurity();
+
         ContenidoResponse response = mlService.clasificarYGuardar(
                 title,
                 text,
                 file,
-                null);
+                userId);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/historial")
+    @Operation(summary = "Obtener historial de análisis", description = "Devuelve el historial de consultas del usuario autenticado o los registros más recientes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Historial obtenido exitosamente",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ContenidoHistoryDto.class))))
+    })
+    public ResponseEntity<List<ContenidoHistoryDto>> obtenerHistorial() {
+        Long userId = getUserIdFromSecurity();
+        List<ContenidoHistoryDto> historial = mlService.obtenerHistorial(userId);
+        return ResponseEntity.ok(historial);
+    }
+
+    @DeleteMapping("/historial")
+    @Operation(summary = "Limpiar historial de análisis", description = "Elimina los registros del historial guardados en la base de datos")
+    public ResponseEntity<Void> limpiarHistorial() {
+        Long userId = getUserIdFromSecurity();
+        mlService.limpiarHistorial(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/buscar")
+    @Operation(summary = "Buscar contenidos clasificados", description = "Busca documentos por término o categoría")
+    public ResponseEntity<List<ContenidoHistoryDto>> buscarContenidos(
+            @RequestParam(value = "query", required = false) String query) {
+        List<ContenidoHistoryDto> resultados = mlService.buscarContenidos(query);
+        return ResponseEntity.ok(resultados);
     }
 }

@@ -131,7 +131,7 @@
       </div>
 
       <div class="relative max-w-sm w-full">
-        <input type="text" placeholder="Buscar métricas, instancias OCI (⌘K)..."
+        <input type="text" id="globalHeaderSearch" placeholder="Buscar documentos en BD (⌘K + Enter)..."
           class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
         <kbd class="absolute right-2.5 top-2 text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded">⌘K</kbd>
@@ -191,7 +191,7 @@
         <div class="bg-slate-900/80 border border-cyan-500/20 rounded-xl p-4 flex items-center justify-between shadow-lg">
           <div>
             <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Documentos Procesados</span>
-            <span class="text-2xl font-bold text-white mt-0.5 block">1,248</span>
+            <span id="kpiTotalDocs" class="text-2xl font-bold text-white mt-0.5 block">1,248</span>
           </div>
           <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-lg">
             <i class="fa-regular fa-file-lines"></i>
@@ -201,7 +201,7 @@
         <div class="bg-slate-900/80 border border-cyan-500/20 rounded-xl p-4 flex items-center justify-between shadow-lg">
           <div>
             <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Precisión Promedio ML</span>
-            <span class="text-2xl font-bold text-emerald-400 mt-0.5 block">96.4%</span>
+            <span id="kpiPrecision" class="text-2xl font-bold text-emerald-400 mt-0.5 block">96.4%</span>
           </div>
           <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
             <i class="fa-solid fa-crosshair"></i>
@@ -211,7 +211,7 @@
         <div class="bg-slate-900/80 border border-cyan-500/20 rounded-xl p-4 flex items-center justify-between shadow-lg">
           <div>
             <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Latencia Inferencia</span>
-            <span class="text-2xl font-bold text-cyan-300 mt-0.5 block">~42 ms</span>
+            <span id="kpiLatencia" class="text-2xl font-bold text-cyan-300 mt-0.5 block">~42 ms</span>
           </div>
           <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-300 flex items-center justify-center text-lg">
             <i class="fa-solid fa-bolt"></i>
@@ -221,7 +221,7 @@
         <div class="bg-slate-900/80 border border-cyan-500/20 rounded-xl p-4 flex items-center justify-between shadow-lg">
           <div>
             <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">Categoría Dominante</span>
-            <span class="text-base font-bold text-amber-400 mt-0.5 block truncate">Backend Dev</span>
+            <span id="kpiTopCat" class="text-base font-bold text-amber-400 mt-0.5 block truncate">Backend Dev</span>
           </div>
           <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
             <i class="fa-solid fa-tag"></i>
@@ -266,12 +266,44 @@
     });
     if (localStorage.getItem('theme') === 'light') setTheme(true);
 
+    async function cargarMetricasApi() {
+      try {
+        const res = await fetch('/api/dashboard/metrics');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.totalDocumentos) document.getElementById('kpiTotalDocs').textContent = Number(data.totalDocumentos).toLocaleString();
+          if (data.precisionPromedio) document.getElementById('kpiPrecision').textContent = `${data.precisionPromedio}%`;
+          if (data.latenciaPromedioMs) document.getElementById('kpiLatencia').textContent = `~${data.latenciaPromedioMs} ms`;
+          if (data.categoriaDominante) document.getElementById('kpiTopCat').textContent = data.categoriaDominante;
+        }
+      } catch (e) {
+        console.warn("Métricas API diferidas:", e);
+      }
+    }
+    cargarMetricasApi();
+
     openTestsBtn?.addEventListener('click', () => testsModal.classList.remove('hidden'));
     closeTestsModal?.addEventListener('click', () => testsModal.classList.add('hidden'));
     runTestsBtn?.addEventListener('click', () => {
       showToast("Ejecutando suite de pruebas automatizadas...", "info");
       setTimeout(() => showToast("4/4 Tests aprobados exitosamente", "success"), 600);
     });
+
+    const globalHeaderSearch = document.getElementById('globalHeaderSearch');
+    if (globalHeaderSearch) {
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          globalHeaderSearch.focus();
+        }
+      });
+      globalHeaderSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const q = globalHeaderSearch.value.trim();
+          if (q) window.location.href = `recomendaciones.html?query=${encodeURIComponent(q)}`;
+        }
+      });
+    }
 
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMobileMenu = document.getElementById('closeMobileMenu');
@@ -284,3 +316,5 @@
 </body>
 
 </html>
+
+

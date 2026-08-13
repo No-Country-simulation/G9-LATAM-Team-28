@@ -4,6 +4,7 @@ import com.techmind.config.JwtConfig;
 import com.techmind.dto.AuthResponse;
 import com.techmind.dto.LoginRequest;
 import com.techmind.dto.RegisterRequest;
+import com.techmind.dto.UserMeResponse;
 import com.techmind.entity.User;
 import com.techmind.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +43,9 @@ public class AuthController {
                     content = @Content)
     })
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        if (request == null || request.getEmail() == null || request.getEmail().isBlank()) {
+            return ResponseEntity.badRequest().body("El email es requerido");
+        }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email ya registrado");
         }
@@ -46,7 +53,7 @@ public class AuthController {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setNombre(request.getNombre());
+        user.setNombre(request.getNombre() != null && !request.getNombre().isBlank() ? request.getNombre() : "Usuario");
 
         userRepository.save(user);
 
@@ -74,5 +81,17 @@ public class AuthController {
 
         String token = jwtConfig.generarToken(user.getEmail());
         return ResponseEntity.ok(new AuthResponse(token, user.getEmail(), user.getNombre()));
+    }
+
+    @GetMapping("/me")
+    @Operation(summary = "Obtener perfil de usuario actual", description = "Devuelve los datos del usuario autenticado mediante el token JWT")
+    public ResponseEntity<?> getProfile() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UserDetails userDetails) {
+            User user = userRepository.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            return ResponseEntity.ok(new UserMeResponse(user.getId(), user.getEmail(), user.getNombre(), user.getRol()));
+        }
+        return ResponseEntity.status(401).body("No autenticado");
     }
 }

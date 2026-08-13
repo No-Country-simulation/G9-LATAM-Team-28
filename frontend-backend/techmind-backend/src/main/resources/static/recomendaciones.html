@@ -104,7 +104,7 @@
       </div>
 
       <div class="relative max-w-sm w-full">
-        <input type="text" placeholder="Buscar catálogo o similitud (⌘K)..."
+        <input type="text" id="globalHeaderSearch" placeholder="Buscar documentos en BD (⌘K + Enter)..."
           class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
         <kbd class="absolute right-2.5 top-2 text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded">⌘K</kbd>
@@ -170,15 +170,6 @@
   </main>
 
   <script>
-    const CATALOGO_DOCUMENTOS = [
-      { id: 1, titulo: "Spring Boot Microservices & REST API Best Practices", categoria: "Backend Development", similitud: "98%", tags: ["Java", "Spring Boot", "API REST", "Microservicios"], resumen: "Guía completa para construir microservicios resilientes con Spring Cloud y Java 21." },
-      { id: 2, titulo: "Despliegue de Aplicaciones en Oracle Cloud Infrastructure (OCI)", categoria: "Cloud Computing & OCI", similitud: "95%", tags: ["OCI", "Cloud", "Compute", "DevOps"], resumen: "Arquitectura Cloud Native desplegada en instancias VM.Standard de Oracle Cloud." },
-      { id: 3, titulo: "Entrenamiento y Serialización de Modelos NLP con Scikit-Learn", categoria: "Data Science & AI", similitud: "97%", tags: ["Python", "Scikit-Learn", "NLP", "Machine Learning"], resumen: "Pipeline de procesamiento de lenguaje natural y exportación a archivos joblib." },
-      { id: 4, titulo: "Diseño de Interfaces Modernas con Tailwind CSS v4 & Accessibility", categoria: "Frontend & UX/UI", similitud: "92%", tags: ["Frontend", "Tailwind CSS", "UX/UI", "WCAG"], resumen: "Patrones de diseño accesibles con enfoque Glassmorphism y temas dinámicos." },
-      { id: 5, titulo: "Optimización de Consultas SQL y Persistencia JPA / Hibernate", categoria: "Backend Development", similitud: "91%", tags: ["Java", "SQL", "JPA", "Base de Datos"], resumen: "Técnicas de tuning de rendimiento para repositorios de datos de alta escala." },
-      { id: 6, titulo: "Almacenamiento de Objetos en OCI Object Storage Bucket", categoria: "Cloud Computing & OCI", similitud: "94%", tags: ["OCI", "Object Storage", "Bucket", "Security"], resumen: "Gestión de buckets y políticas IAM para resguardo de modelos y artefactos." }
-    ];
-
     const toastContainer = document.getElementById('toastContainer');
     const recommendedGrid = document.getElementById('recommendedGrid');
     const searchInput = document.getElementById('searchInput');
@@ -211,16 +202,82 @@
     });
     if (localStorage.getItem('theme') === 'light') setTheme(true);
 
-    function getCategoryIcon(cat) {
+    function getCategoryIcon(cat = '') {
       if (cat.includes('Backend')) return '<i class="fa-solid fa-server text-cyan-400"></i>';
-      if (cat.includes('Cloud')) return '<i class="fa-solid fa-cloud text-amber-400"></i>';
-      if (cat.includes('Data Science') || cat.includes('AI')) return '<i class="fa-solid fa-brain text-purple-400"></i>';
+      if (cat.includes('Cloud') || cat.includes('OCI')) return '<i class="fa-solid fa-cloud text-amber-400"></i>';
+      if (cat.includes('Data') || cat.includes('AI') || cat.includes('ML')) return '<i class="fa-solid fa-brain text-purple-400"></i>';
       return '<i class="fa-solid fa-code text-emerald-400"></i>';
     }
 
-    function renderizarRecomendaciones(categoriaFiltro = 'all') {
+    async function cargarDocumentosDesdeBd(query = '') {
+      const token = localStorage.getItem('techmind_token');
+      const headers = {};
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      try {
+        const url = query ? `/contenido/buscar?query=${encodeURIComponent(query)}` : '/contenido/historial';
+        const res = await fetch(url, { headers });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            return data.map(item => ({
+              id: item.id,
+              titulo: item.titulo || "Sin título",
+              categoria: item.categoria || "General",
+              similitud: item.confianza || "95%",
+              tags: (item.palabrasClave && item.palabrasClave.length > 0) ? item.palabrasClave : ["BD PostgreSQL", "TechMind"],
+              resumen: item.texto || "Contenido técnico procesado y almacenado en PostgreSQL.",
+              fecha: item.createdAt ? new Date(item.createdAt).toLocaleDateString('es-ES') : "Reciente"
+            }));
+          }
+        }
+      } catch (e) {
+        console.warn("Error al consultar la base de datos:", e);
+      }
+      return [];
+    }
+
+    let categoriaActual = 'all';
+
+    async function renderizarRecomendaciones(categoriaFiltro = 'all', searchTerms = '') {
+      categoriaActual = categoriaFiltro;
+      recommendedGrid.innerHTML = '<div class="col-span-2 text-center py-10 text-cyan-400 font-semibold text-xs animate-pulse"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Consultando base de datos PostgreSQL...</div>';
+
+      const todos = await cargarDocumentosDesdeBd(searchTerms);
+
+      let filtrados = todos.filter(doc => {
+        if (categoriaFiltro === 'all') return true;
+        return doc.categoria.toLowerCase().includes(categoriaFiltro.toLowerCase()) || 
+               categoriaFiltro.toLowerCase().includes(doc.categoria.toLowerCase());
+      });
+
+      if (searchTerms && searchTerms.trim()) {
+        const q = searchTerms.toLowerCase().trim();
+        filtrados = filtrados.filter(doc => 
+          doc.titulo.toLowerCase().includes(q) || 
+          doc.resumen.toLowerCase().includes(q) || 
+          doc.categoria.toLowerCase().includes(q) ||
+          (doc.tags && doc.tags.some(t => t.toLowerCase().includes(q)))
+        );
+      }
+
       recommendedGrid.innerHTML = '';
-      const filtrados = CATALOGO_DOCUMENTOS.filter(doc => categoriaFiltro === 'all' || doc.categoria === categoriaFiltro);
+
+      if (filtrados.length === 0) {
+        recommendedGrid.innerHTML = `
+          <div class="col-span-2 text-center py-10 bg-slate-900/60 rounded-2xl border border-cyan-500/20 p-8 space-y-3">
+            <div class="w-12 h-12 rounded-full bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto text-xl">
+              <i class="fa-solid fa-database"></i>
+            </div>
+            <h4 class="text-sm font-bold text-slate-200">No hay documentos registrados en la base de datos</h4>
+            <p class="text-xs text-slate-400 max-w-md mx-auto">Ingresa y clasifica un contenido en el formulario principal para que aparezca aquí dinámicamente desde PostgreSQL.</p>
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition-all mt-2">
+              <i class="fa-solid fa-bolt"></i> Ir al Clasificador ML
+            </a>
+          </div>
+        `;
+        return;
+      }
 
       filtrados.forEach(doc => {
         const card = document.createElement('article');
@@ -235,9 +292,12 @@
                 ${catIcon}
                 <span>${doc.categoria}</span>
               </span>
-              <span class="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-xl border border-emerald-500/30">
-                <i class="fa-solid fa-bolt text-[10px]"></i> ${doc.similitud}
-              </span>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] text-cyan-300 bg-cyan-950 border border-cyan-500/30 px-2 py-0.5 rounded font-mono"><i class="fa-solid fa-database mr-1"></i>BD PostgreSQL</span>
+                <span class="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-400 bg-emerald-950 px-2.5 py-1 rounded-xl border border-emerald-500/30">
+                  <i class="fa-solid fa-bolt text-[10px]"></i> ${doc.similitud}
+                </span>
+              </div>
             </div>
             
             <h3 class="text-sm font-bold text-slate-100 group-hover:text-cyan-300 transition-colors leading-snug">
@@ -251,24 +311,34 @@
 
           <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
             <div class="flex flex-wrap gap-1.5">
-              ${doc.tags.slice(0, 3).map(t => `<span class="text-[10px] text-slate-400 bg-slate-950/80 px-2.5 py-0.5 rounded-lg border border-slate-800">${t}</span>`).join('')}
+              ${(doc.tags || []).slice(0, 3).map(t => `<span class="text-[10px] text-slate-400 bg-slate-950/80 px-2.5 py-0.5 rounded-lg border border-slate-800">${t}</span>`).join('')}
             </div>
-            <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 transition-all shrink-0">
+            <button type="button" onclick="cargarEnFormulario('${encodeURIComponent(doc.titulo)}', '${encodeURIComponent(doc.resumen)}')" 
+              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 transition-all shrink-0 cursor-pointer">
               Abrir <i class="fa-solid fa-arrow-right text-[10px]"></i>
-            </a>
+            </button>
           </div>
         `;
         recommendedGrid.appendChild(card);
       });
     }
 
+    function cargarEnFormulario(tituloEnc, textoEnc) {
+      const titulo = decodeURIComponent(tituloEnc);
+      const texto = decodeURIComponent(textoEnc);
+      localStorage.setItem('techmind_sample_title', titulo);
+      localStorage.setItem('techmind_sample_text', texto);
+      window.location.href = "index.html";
+    }
+
+    let searchDebounceTimeout = null;
     searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase().trim();
-      const cards = recommendedGrid.querySelectorAll('article');
-      cards.forEach(card => {
-        const text = card.textContent.toLowerCase();
-        card.style.display = (!query || text.includes(query)) ? 'flex' : 'none';
-      });
+      clearTimeout(searchDebounceTimeout);
+      const query = searchInput.value.trim();
+
+      searchDebounceTimeout = setTimeout(() => {
+        renderizarRecomendaciones(categoriaActual, query);
+      }, 300);
     });
 
     document.querySelectorAll('.catFilterBtn').forEach(btn => {
@@ -278,9 +348,27 @@
         });
         btn.className = 'catFilterBtn active px-3 py-1 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 transition-all';
         const cat = btn.getAttribute('data-cat');
-        renderizarRecomendaciones(cat);
+        renderizarRecomendaciones(cat, searchInput.value.trim());
       });
     });
+
+    const globalHeaderSearch = document.getElementById('globalHeaderSearch');
+    if (globalHeaderSearch) {
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          globalHeaderSearch.focus();
+        }
+      });
+      globalHeaderSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const q = globalHeaderSearch.value.trim();
+          if (searchInput) searchInput.value = q;
+          renderizarRecomendaciones(categoriaActual, q);
+        }
+      });
+    }
 
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMobileMenu = document.getElementById('closeMobileMenu');
@@ -290,8 +378,19 @@
     if (closeMobileMenu) closeMobileMenu.addEventListener('click', () => { mobileSidebar.classList.add('-translate-x-full'); mobileBackdrop.classList.add('hidden'); });
     if (mobileBackdrop) mobileBackdrop.addEventListener('click', () => { mobileSidebar.classList.add('-translate-x-full'); mobileBackdrop.classList.add('hidden'); });
 
-    renderizarRecomendaciones();
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryInicial = urlParams.get('query') || urlParams.get('q') || '';
+    if (queryInicial) {
+      if (searchInput) searchInput.value = queryInicial;
+      if (globalHeaderSearch) globalHeaderSearch.value = queryInicial;
+    }
+
+    renderizarRecomendaciones('all', queryInicial);
   </script>
 </body>
 
 </html>
+
+
+
+

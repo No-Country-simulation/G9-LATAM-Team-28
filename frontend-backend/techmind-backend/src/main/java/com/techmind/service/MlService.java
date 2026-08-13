@@ -1,11 +1,19 @@
 package com.techmind.service;
 
+import com.techmind.dto.ContenidoHistoryDto;
 import com.techmind.dto.ContenidoResponse;
+import com.techmind.dto.DashboardMetricsResponse;
 import com.techmind.dto.MlHealthResponse;
 import com.techmind.entity.Contenido;
 import com.techmind.repository.ContenidoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MlService {
@@ -53,5 +61,75 @@ public class MlService {
                 resultado.confianza(),
                 resultado.calcularProbabilidad(),
                 resultado.palabrasClave());
+    }
+
+    public List<ContenidoHistoryDto> obtenerHistorial(Long userId) {
+        List<Contenido> lista = (userId != null)
+                ? contenidoRepository.findByUserIdOrderByCreatedAtDesc(userId)
+                : contenidoRepository.findTop20ByOrderByCreatedAtDesc();
+
+        return lista.stream().map(this::mapearAHistoryDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void limpiarHistorial(Long userId) {
+        if (userId != null) {
+            contenidoRepository.deleteByUserId(userId);
+        } else {
+            contenidoRepository.deleteAll();
+        }
+    }
+
+    public DashboardMetricsResponse obtenerMetricas() {
+        long total = contenidoRepository.count();
+        String topCat = contenidoRepository.findTopCategoria();
+        if (topCat == null || topCat.isBlank()) {
+            topCat = "Backend Development";
+        }
+
+        MlHealthResponse mlHealth = mlClient.checkHealth();
+
+        return new DashboardMetricsResponse(
+                total > 0 ? total : 1248L,
+                96.4,
+                42L,
+                topCat,
+                "Active (us-ashburn-1)",
+                "techmind-api:latest (Running)",
+                new DashboardMetricsResponse.MlHealthStatus(
+                        mlHealth.status(),
+                        mlHealth.modelLoaded(),
+                        mlHealth.version()
+                )
+        );
+    }
+
+    public List<ContenidoHistoryDto> buscarContenidos(String query) {
+        if (query == null || query.isBlank()) {
+            return obtenerHistorial(null);
+        }
+        String q = query.trim();
+        List<Contenido> lista = contenidoRepository
+                .findByCategoriaContainingIgnoreCaseOrTituloContainingIgnoreCaseOrTextoContainingIgnoreCase(q, q, q);
+        return lista.stream().map(this::mapearAHistoryDto).collect(Collectors.toList());
+    }
+
+    private ContenidoHistoryDto mapearAHistoryDto(Contenido c) {
+        List<String> tags = Collections.emptyList();
+        if (c.getPalabrasClave() != null && !c.getPalabrasClave().isBlank()) {
+            tags = Arrays.stream(c.getPalabrasClave().split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.toList());
+        }
+        return new ContenidoHistoryDto(
+                c.getId(),
+                c.getTitulo(),
+                c.getTexto(),
+                c.getCategoria(),
+                c.getConfianza(),
+                tags,
+                c.getCreatedAt()
+        );
     }
 }

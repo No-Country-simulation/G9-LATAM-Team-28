@@ -236,16 +236,75 @@
       formLogin.classList.add('hidden');
     });
 
-    formLogin.addEventListener('submit', (e) => {
+    formLogin.addEventListener('submit', async (e) => {
       e.preventDefault();
-      showToast("Sesión iniciada correctamente. Redirigiendo...", "success");
-      setTimeout(() => window.location.href = "index.html", 800);
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+
+      if (!email || !password) {
+        showToast("Ingresa tu correo y contraseña.", "warning");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({ message: "Credenciales inválidas" }));
+          throw new Error(errData.message || "Error al iniciar sesión");
+        }
+
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem('techmind_token', data.token);
+          localStorage.setItem('techmind_user', JSON.stringify(data));
+          showToast(`¡Bienvenido de nuevo, ${data.nombre || email}!`, "success");
+          setTimeout(() => window.location.href = "index.html", 800);
+        } else {
+          throw new Error("Token no recibido del servidor");
+        }
+      } catch (err) {
+        showToast(err.message || "Error de autenticación. Verifique sus credenciales.", "error");
+      }
     });
 
-    formRegister.addEventListener('submit', (e) => {
+    formRegister.addEventListener('submit', async (e) => {
       e.preventDefault();
-      showToast("Cuenta registrada exitosamente. Bienvenido.", "success");
-      setTimeout(() => window.location.href = "index.html", 800);
+      const nombre = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value.trim();
+
+      if (!email || !password) {
+        showToast("Por favor completa el correo y contraseña.", "warning");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, email, password })
+        });
+
+        if (!res.ok) {
+          const errData = await res.text().catch(() => "Error en el registro");
+          throw new Error(errData || "Error al registrar cuenta");
+        }
+
+        const data = await res.json();
+        if (data.token) {
+          localStorage.setItem('techmind_token', data.token);
+          localStorage.setItem('techmind_user', JSON.stringify(data));
+          showToast("Cuenta registrada exitosamente. Redirigiendo...", "success");
+          setTimeout(() => window.location.href = "index.html", 800);
+        }
+      } catch (err) {
+        showToast(err.message || "No se pudo registrar la cuenta.", "error");
+      }
     });
 
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -259,3 +318,4 @@
 </body>
 
 </html>
+

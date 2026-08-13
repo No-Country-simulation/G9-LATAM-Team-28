@@ -132,7 +132,7 @@
 
       <!-- BUSCADOR GLOBAL Y COMANDOS DE CABECERA -->
       <div class="relative max-w-sm w-full">
-        <input type="text" placeholder="Buscar documentos, APIs o modelos (⌘K)..."
+        <input type="text" id="globalHeaderSearch" placeholder="Buscar documentos en BD (⌘K + Enter)..."
           class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
         <kbd
@@ -416,6 +416,18 @@
     }
     checkMlHealth();
 
+    // Cargar muestra si viene redireccionado desde recomendaciones.html
+    const sampleTitle = localStorage.getItem('techmind_sample_title');
+    const sampleText = localStorage.getItem('techmind_sample_text');
+    if (sampleTitle || sampleText) {
+      if (sampleTitle) tituloInput.value = sampleTitle;
+      if (sampleText) textoInput.value = sampleText;
+      charCount.textContent = `${textoInput.value.length} caracteres`;
+      localStorage.removeItem('techmind_sample_title');
+      localStorage.removeItem('techmind_sample_text');
+      showToast("Documento de recomendación cargado en el clasificador ML.", "info");
+    }
+
     document.querySelectorAll('.btnSample').forEach(btn => {
       btn.addEventListener('click', () => {
         selectedFile = null;
@@ -539,6 +551,10 @@
 
       try {
         let data;
+        const token = localStorage.getItem('techmind_token');
+        const headers = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
         if (selectedFile) {
           const formData = new FormData();
           if (titulo) formData.append('title', titulo);
@@ -547,14 +563,16 @@
 
           const res = await fetch('/contenido/archivo', {
             method: 'POST',
+            headers: headers,
             body: formData
           });
           if (!res.ok) throw new Error(`Status ${res.status}`);
           data = await res.json();
         } else {
+          headers['Content-Type'] = 'application/json';
           const res = await fetch('/contenido', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify({ titulo, texto })
           });
           if (!res.ok) throw new Error(`Status ${res.status}`);
@@ -632,6 +650,22 @@
         btnIcon.classList.remove('hidden');
       }
     });
+
+    const globalHeaderSearch = document.getElementById('globalHeaderSearch');
+    if (globalHeaderSearch) {
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          globalHeaderSearch.focus();
+        }
+      });
+      globalHeaderSearch.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const q = globalHeaderSearch.value.trim();
+          if (q) window.location.href = `recomendaciones.html?query=${encodeURIComponent(q)}`;
+        }
+      });
+    }
 
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMobileMenu = document.getElementById('closeMobileMenu');
