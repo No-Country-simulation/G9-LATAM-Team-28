@@ -23,8 +23,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
 
@@ -36,13 +36,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = authHeader.substring(7);
 
         if (jwtConfig.validarToken(token)) {
-            String email = jwtConfig.extraerEmail(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            try {
+                String email = jwtConfig.extraerEmail(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            } catch (org.springframework.security.core.userdetails.UsernameNotFoundException e) {
+                logger.warn("Token JWT válido pero usuario no encontrado en la base de datos: " + e.getMessage());
+            } catch (Exception e) {
+                logger.error("Error al procesar la autenticación JWT: " + e.getMessage());
+            }
         }
 
         filterChain.doFilter(request, response);

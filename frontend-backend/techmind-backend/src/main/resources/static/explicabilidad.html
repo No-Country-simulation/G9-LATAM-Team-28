@@ -100,15 +100,20 @@
       </div>
     </div>
 
+    <!-- TARJETA DE USUARIO Y CIERRE DE SESIÓN -->
     <div class="pt-4 border-t border-cyan-500/20">
-      <a href="login.html" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-cyan-500/10 transition-colors group">
-        <div class="w-9 h-9 rounded-full bg-cyan-500 text-slate-950 font-extrabold text-sm flex items-center justify-center">G</div>
-        <div class="flex flex-col flex-1 min-w-0">
-          <span class="text-xs font-semibold text-slate-200 group-hover:text-cyan-300 truncate">Gabriel (Team No Country)</span>
-          <span class="text-[11px] text-slate-400 truncate">Mi Cuenta / Acceso</span>
+      <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 border border-cyan-500/20">
+        <div class="flex items-center gap-3 min-w-0 flex-1">
+          <div id="userAvatarBtn" class="w-8 h-8 rounded-full bg-cyan-500 text-slate-950 font-extrabold text-xs flex items-center justify-center shrink-0">U</div>
+          <div class="flex flex-col min-w-0 flex-1">
+            <span id="userNameLabel" class="text-xs font-semibold text-slate-200 truncate">Usuario</span>
+            <span id="userEmailLabel" class="text-[10px] text-slate-400 truncate">Autenticado</span>
+          </div>
         </div>
-        <i class="fa-solid fa-angle-right text-slate-400"></i>
-      </a>
+        <button id="logoutBtn" title="Cerrar sesión" aria-label="Cerrar sesión" class="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors shrink-0">
+          <i class="fa-solid fa-right-from-bracket text-xs"></i>
+        </button>
+      </div>
     </div>
   </aside>
 
@@ -152,10 +157,13 @@
           <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cyan-400 rounded-full"></span>
         </button>
 
-        <a href="login.html" class="flex items-center gap-2 pl-2 pr-3 py-1 rounded-xl bg-slate-950 border border-cyan-500/30 hover:border-cyan-400/50 transition-all">
-          <div class="w-6 h-6 rounded-full bg-cyan-500 text-slate-950 font-bold text-[11px] flex items-center justify-center">G</div>
-          <span class="text-xs font-semibold text-slate-200">Gabriel</span>
-        </a>
+        <div class="flex items-center gap-2 pl-2 pr-2.5 py-1 rounded-xl bg-slate-950 border border-cyan-500/30">
+          <div id="headerUserAvatar" class="w-6 h-6 rounded-full bg-cyan-500 text-slate-950 font-bold text-[11px] flex items-center justify-center shrink-0">U</div>
+          <span id="headerUserName" class="text-xs font-semibold text-slate-200">Usuario</span>
+          <button id="headerLogoutBtn" title="Cerrar sesión" class="ml-1 text-slate-400 hover:text-rose-400 text-xs">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -287,6 +295,38 @@
       });
     }
 
+    // Guard de Autenticación y Gestor de Sesión
+    const authToken = localStorage.getItem('techmind_token');
+    if (!authToken) {
+      window.location.href = "login.html";
+    }
+
+    const userData = JSON.parse(localStorage.getItem('techmind_user') || '{}');
+    const userNombre = userData.nombre || userData.email || 'Usuario';
+    const userEmail = userData.email || '';
+    const userInitial = userNombre.charAt(0).toUpperCase();
+
+    const userNameLabel = document.getElementById('userNameLabel');
+    const userEmailLabel = document.getElementById('userEmailLabel');
+    const userAvatarBtn = document.getElementById('userAvatarBtn');
+    const headerUserName = document.getElementById('headerUserName');
+    const headerUserAvatar = document.getElementById('headerUserAvatar');
+
+    if (userNameLabel) userNameLabel.textContent = userNombre;
+    if (userEmailLabel) userEmailLabel.textContent = userEmail || 'Autenticado';
+    if (userAvatarBtn) userAvatarBtn.textContent = userInitial;
+    if (headerUserName) headerUserName.textContent = userNombre;
+    if (headerUserAvatar) headerUserAvatar.textContent = userInitial;
+
+    function ejecutarCierreSesion() {
+      localStorage.removeItem('techmind_token');
+      localStorage.removeItem('techmind_user');
+      window.location.href = "login.html";
+    }
+
+    document.getElementById('logoutBtn')?.addEventListener('click', ejecutarCierreSesion);
+    document.getElementById('headerLogoutBtn')?.addEventListener('click', ejecutarCierreSesion);
+
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const closeMobileMenu = document.getElementById('closeMobileMenu');
     const mobileSidebar = document.getElementById('mobileSidebar');
@@ -298,4 +338,5 @@
 </body>
 
 </html>
+
 

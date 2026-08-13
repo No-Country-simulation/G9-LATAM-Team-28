@@ -20,9 +20,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copiar el código de la aplicación y el modelo entrenado
-COPY main.py .
-COPY modelo_clasificador_cursos_udemy.pkl .
+# Copiar el código de la aplicación, módulos y el modelo entrenado
+COPY . .
 
 # Exponer el puerto en el que escucha FastAPI
 EXPOSE 8000
