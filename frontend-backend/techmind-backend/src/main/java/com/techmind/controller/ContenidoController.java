@@ -134,7 +134,8 @@ public class ContenidoController {
     @Operation(summary = "Buscar contenidos clasificados", description = "Busca documentos por término o categoría")
     public ResponseEntity<List<ContenidoHistoryDto>> buscarContenidos(
             @RequestParam(value = "query", required = false) String query) {
-        List<ContenidoHistoryDto> resultados = mlService.buscarContenidos(query);
+        Long userId = getUserIdFromSecurity();
+        List<ContenidoHistoryDto> resultados = mlService.buscarContenidos(query, userId);
         return ResponseEntity.ok(resultados);
     }
 }

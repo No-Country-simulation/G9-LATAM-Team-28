@@ -81,16 +81,27 @@ public class MlService {
         }
     }
 
-    public DashboardMetricsResponse obtenerMetricas() {
-        long total = contenidoRepository.count();
-        String topCat = contenidoRepository.findTopCategoria();
+    public DashboardMetricsResponse obtenerMetricas(Long userId) {
+        long total;
+        String topCat;
+        List<Contenido> confianzaList;
+
+        if (userId != null) {
+            total = contenidoRepository.countByUserId(userId);
+            topCat = contenidoRepository.findTopCategoriaByUserId(userId);
+            confianzaList = contenidoRepository.findAllByConfianzaIsNotNullAndUserId(userId);
+        } else {
+            total = contenidoRepository.count();
+            topCat = contenidoRepository.findTopCategoria();
+            confianzaList = contenidoRepository.findAllByConfianzaIsNotNull();
+        }
+
         if (topCat == null || topCat.isBlank()) {
             topCat = "Backend Development";
         }
 
         // Calcular precisión promedio en Java parseando el campo String confianza
-        OptionalDouble avgConfianza = contenidoRepository.findAllByConfianzaIsNotNull()
-                .stream()
+        OptionalDouble avgConfianza = confianzaList.stream()
                 .map(c -> c.getConfianza().replace("%", "").trim())
                 .filter(s -> !s.isBlank())
                 .mapToDouble(s -> {
@@ -124,13 +135,14 @@ public class MlService {
     }
 
 
-    public List<ContenidoHistoryDto> buscarContenidos(String query) {
+    public List<ContenidoHistoryDto> buscarContenidos(String query, Long userId) {
         if (query == null || query.isBlank()) {
-            return obtenerHistorial(null);
+            return obtenerHistorial(userId);
         }
         String q = query.trim();
-        List<Contenido> lista = contenidoRepository
-                .findByCategoriaContainingIgnoreCaseOrTituloContainingIgnoreCaseOrTextoContainingIgnoreCase(q, q, q);
+        List<Contenido> lista = (userId != null)
+                ? contenidoRepository.buscarPorUsuario(userId, q)
+                : contenidoRepository.findByCategoriaContainingIgnoreCaseOrTituloContainingIgnoreCaseOrTextoContainingIgnoreCase(q, q, q);
         return lista.stream().map(this::mapearAHistoryDto).collect(Collectors.toList());
     }
 

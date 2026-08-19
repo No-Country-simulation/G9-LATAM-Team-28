@@ -415,7 +415,9 @@
 
     async function cargarMetricasApi() {
       try {
-        const res = await fetch('/api/dashboard/metrics');
+        const token = localStorage.getItem('techmind_token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const res = await fetch('/api/dashboard/metrics', { headers });
         if (res.ok) {
           const data = await res.json();
           if (data.totalDocumentos != null) document.getElementById('kpiTotalDocs').textContent = Number(data.totalDocumentos).toLocaleString();
