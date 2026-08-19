@@ -24,7 +24,7 @@ public class MlServiceClient {
 
     private static final Logger logger = LoggerFactory.getLogger(MlServiceClient.class);
 
-    @Value("${ml.service.url:http://79.72.50.78:8000}")
+    @Value("${ml.service.url:http://localhost:8000}")
     private String mlServiceUrl;
 
     private final RestTemplate restTemplate;

@@ -27,11 +27,12 @@
     class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
     <div
       class="bg-slate-900 border border-cyan-500/30 rounded-2xl max-w-md w-full p-6 shadow-2xl shadow-cyan-950/50 space-y-5 relative max-h-[90vh] overflow-y-auto">
-      
+
       <!-- Header del Modal -->
       <div class="flex items-center justify-between border-b border-cyan-500/20 pb-3">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+          <div
+            class="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
             <i class="fa-solid fa-user-gear text-sm"></i>
           </div>
           <div>
@@ -47,15 +48,14 @@
 
       <!-- Formulario de Edición -->
       <form id="editProfileForm" class="space-y-4" novalidate>
-        
+
         <!-- Nombre -->
         <div class="space-y-1.5">
           <label for="editProfileNombre" class="block text-xs font-semibold text-slate-300">
             Nombre Completo <span class="text-rose-400">*</span>
           </label>
           <div class="relative">
-            <input type="text" id="editProfileNombre" required
-              placeholder="Tu nombre completo"
+            <input type="text" id="editProfileNombre" required placeholder="Tu nombre completo"
               class="w-full bg-slate-950 border border-cyan-500/30 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-400 transition-all">
             <i class="fa-solid fa-user absolute left-3 top-2.5 text-slate-500 text-xs"></i>
           </div>
@@ -67,8 +67,7 @@
             Correo Electrónico <span class="text-rose-400">*</span>
           </label>
           <div class="relative">
-            <input type="email" id="editProfileEmail" required
-              placeholder="tu@correo.com"
+            <input type="email" id="editProfileEmail" required placeholder="tu@correo.com"
               class="w-full bg-slate-950 border border-cyan-500/30 rounded-xl pl-9 pr-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-400 transition-all">
             <i class="fa-solid fa-envelope absolute left-3 top-2.5 text-slate-500 text-xs"></i>
           </div>
@@ -88,8 +87,7 @@
               Contraseña Actual
             </label>
             <div class="relative">
-              <input type="password" id="editProfileCurrentPassword"
-                placeholder="Obligatoria si cambias contraseña"
+              <input type="password" id="editProfileCurrentPassword" placeholder="Obligatoria si cambias contraseña"
                 class="w-full bg-slate-950 border border-cyan-500/30 rounded-xl pl-9 pr-10 py-2 text-xs text-slate-100 placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-400 transition-all">
               <i class="fa-solid fa-lock absolute left-3 top-2.5 text-slate-500 text-xs"></i>
               <button type="button" id="toggleCurrentPasswordBtn"
@@ -105,8 +103,7 @@
               Nueva Contraseña
             </label>
             <div class="relative">
-              <input type="password" id="editProfileNewPassword" minlength="6"
-                placeholder="Mínimo 6 caracteres"
+              <input type="password" id="editProfileNewPassword" minlength="6" placeholder="Mínimo 6 caracteres"
                 class="w-full bg-slate-950 border border-cyan-500/30 rounded-xl pl-9 pr-10 py-2 text-xs text-slate-100 placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-400 transition-all">
               <i class="fa-solid fa-shield-halved absolute left-3 top-2.5 text-slate-500 text-xs"></i>
               <button type="button" id="toggleNewPasswordBtn"
@@ -134,7 +131,8 @@
           </div>
         </div>
 
-        <div id="editProfileError" class="hidden text-xs text-rose-400 bg-rose-950/50 border border-rose-500/30 p-2.5 rounded-xl"></div>
+        <div id="editProfileError"
+          class="hidden text-xs text-rose-400 bg-rose-950/50 border border-rose-500/30 p-2.5 rounded-xl"></div>
 
         <!-- Botones de Acción -->
         <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-cyan-500/15">
@@ -225,12 +223,14 @@
     <!-- TARJETA DE USUARIO Y CIERRE DE SESIÓN -->
     <div class="pt-4 border-t border-cyan-500/20">
       <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 border border-cyan-500/20">
-        <div class="flex items-center gap-3 min-w-0 flex-1 cursor-pointer group" id="sidebarUserProfileBtn" title="Editar perfil">
+        <div class="flex items-center gap-3 min-w-0 flex-1 cursor-pointer group" id="sidebarUserProfileBtn"
+          title="Editar perfil">
           <div id="userAvatarBtn"
             class="w-8 h-8 rounded-full bg-cyan-500 text-slate-950 font-extrabold text-xs flex items-center justify-center shrink-0 group-hover:ring-2 group-hover:ring-cyan-400 transition-all">
             U</div>
           <div class="flex flex-col min-w-0 flex-1">
-            <span id="userNameLabel" class="text-xs font-semibold text-slate-200 truncate group-hover:text-cyan-300 transition-colors">Usuario</span>
+            <span id="userNameLabel"
+              class="text-xs font-semibold text-slate-200 truncate group-hover:text-cyan-300 transition-colors">Usuario</span>
             <span id="userEmailLabel" class="text-[10px] text-slate-400 truncate">Autenticado</span>
           </div>
         </div>
@@ -266,11 +266,10 @@
 
       <!-- BUSCADOR GLOBAL Y COMANDOS DE CABECERA -->
       <div class="relative max-w-sm w-full">
-        <input type="text" id="globalHeaderSearch" placeholder="Buscar documentos en BD (⌘K + Enter)..."
+        <input type="text" id="globalHeaderSearch" placeholder="Buscar documentos en BD..."
           class="w-full bg-slate-950/80 border border-cyan-500/30 rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all">
         <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-500 text-xs"></i>
-        <kbd
-          class="absolute right-2.5 top-2 text-[10px] font-mono text-slate-400 bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded">⌘K</kbd>
+
       </div>
 
       <!-- UTILIDADES CORPORATIVAS Y PERFIL -->
@@ -295,8 +294,10 @@
             <div id="headerUserAvatar"
               class="w-6 h-6 rounded-full bg-cyan-500 text-slate-950 font-bold text-[11px] flex items-center justify-center shrink-0 shadow-sm shadow-cyan-500/30">
               U</div>
-            <span id="headerUserName" class="text-xs font-semibold text-slate-200 group-hover:text-white transition-colors max-w-[120px] truncate">Usuario</span>
-            <i id="userMenuChevron" class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-cyan-400 transition-transform duration-200"></i>
+            <span id="headerUserName"
+              class="text-xs font-semibold text-slate-200 group-hover:text-white transition-colors max-w-[120px] truncate">Usuario</span>
+            <i id="userMenuChevron"
+              class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-cyan-400 transition-transform duration-200"></i>
           </button>
 
           <!-- Menu Desplegable -->
@@ -304,9 +305,10 @@
             class="hidden absolute right-0 mt-2 w-56 bg-slate-900/95 border border-cyan-500/30 rounded-2xl shadow-2xl shadow-black/80 backdrop-blur-xl py-2 z-50">
             <div class="px-3.5 py-2 border-b border-cyan-500/15">
               <p class="text-[10px] uppercase font-bold tracking-wider text-cyan-400">Cuenta de usuario</p>
-              <p id="dropdownUserEmail" class="text-xs text-slate-300 font-medium truncate mt-0.5">usuario@techmind.com</p>
+              <p id="dropdownUserEmail" class="text-xs text-slate-300 font-medium truncate mt-0.5">usuario@techmind.com
+              </p>
             </div>
-            
+
             <div class="py-1">
               <button type="button" id="openEditProfileBtn"
                 class="w-full text-left px-3.5 py-2 text-xs text-slate-200 hover:bg-cyan-500/10 hover:text-cyan-300 flex items-center gap-2.5 transition-colors cursor-pointer">
@@ -390,19 +392,57 @@
         </div>
 
         <div class="flex flex-col justify-between gap-4">
-          <div id="dropZone" tabindex="0" role="button" aria-label="Cargar archivo txt o csv"
-            class="border-2 border-dashed border-cyan-500/30 hover:border-cyan-400 focus:border-cyan-400 bg-slate-950/50 hover:bg-cyan-950/20 focus:bg-cyan-950/20 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center flex-1 focus:outline-none group">
-            <div class="text-cyan-400 mb-2 group-hover:scale-110 transition-transform">
-              <i class="fa-solid fa-file-arrow-up text-3xl"></i>
+          <div id="dropZone" tabindex="0" role="button" aria-label="Cargar archivo PDF, TXT, CSV o DOCX"
+            class="relative border-2 border-dashed border-cyan-500/30 hover:border-cyan-400 focus:border-cyan-400 bg-slate-950/50 hover:bg-cyan-950/20 focus:bg-cyan-950/20 rounded-xl p-5 text-center cursor-pointer transition-all duration-200 flex flex-col items-center justify-center flex-1 focus:outline-none group">
+
+            <!-- Vista por defecto (sin archivo) -->
+            <div id="dropZoneDefault" class="flex flex-col items-center justify-center">
+              <div class="text-cyan-400 mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-cloud-arrow-up text-3xl"></i>
+              </div>
+              <span class="font-semibold text-xs text-slate-200 group-hover:text-cyan-300 mb-1">
+                Subir Documento (PDF, TXT, CSV, DOCX)
+              </span>
+              <span class="text-[11px] text-slate-400 leading-tight">
+                Arrastra tu archivo aquí o haz clic para explorar
+              </span>
+              <div class="flex items-center gap-1.5 mt-2.5">
+                <span class="file-format-badge format-pdf text-[9px] font-bold px-1.5 py-0.5 rounded">PDF</span>
+                <span class="file-format-badge format-txt text-[9px] font-bold px-1.5 py-0.5 rounded">TXT</span>
+                <span class="file-format-badge format-csv text-[9px] font-bold px-1.5 py-0.5 rounded">CSV</span>
+                <span class="file-format-badge format-docx text-[9px] font-bold px-1.5 py-0.5 rounded">DOCX</span>
+              </div>
             </div>
-            <span class="font-semibold text-xs text-slate-200 group-hover:text-cyan-300 mb-1">Carga Lotes
-              (CSV/TXT)</span>
-            <span class="text-[11px] text-slate-400 leading-tight">Procesamiento por lote</span>
-            <input type="file" id="fileInput" accept=".txt,.csv" class="hidden">
+
+            <!-- Vista con archivo seleccionado -->
+            <div id="dropZoneSelected" class="hidden flex-col items-center justify-center w-full space-y-2">
+              <div id="fileIconContainer"
+                class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-lg icon-box-default">
+                <i id="fileTypeIcon" class="fa-solid fa-file"></i>
+              </div>
+              <div class="max-w-[220px] text-center">
+                <p id="selectedFileName" class="text-xs font-bold text-slate-100 truncate"></p>
+                <p id="selectedFileSize" class="text-[10px] text-cyan-400 font-medium"></p>
+              </div>
+              <div class="flex items-center gap-2 pt-1">
+                <span
+                  class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-check text-[9px]"></i> Archivo adjunto
+                </span>
+                <button type="button" id="btnRemoveFile" title="Quitar archivo"
+                  class="p-1 px-2 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300 hover:bg-rose-900/60 hover:text-white text-[11px] flex items-center gap-1 transition-colors cursor-pointer">
+                  <i class="fa-solid fa-xmark"></i> Quitar
+                </button>
+              </div>
+            </div>
+
+            <input type="file" id="fileInput"
+              accept=".pdf,.txt,.csv,.docx,.doc,application/pdf,text/plain,text/csv,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"
+              class="hidden">
           </div>
 
           <button type="submit" id="btnSubmit"
-            class="w-full bg-cyan-500 hover:bg-cyan-400 active:bg-cyan-600 text-slate-950 font-bold py-3 px-5 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg shadow-cyan-500/25 active:scale-[0.98] focus:outline-none">
+            class="w-full bg-cyan-500 hover:bg-cyan-400 active:bg-cyan-600 text-slate-950 font-bold py-3 px-5 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 shadow-lg shadow-cyan-500/25 active:scale-[0.98] focus:outline-none cursor-pointer">
             <i id="btnIcon" class="fa-solid fa-wand-magic-sparkles"></i>
             <span id="btnText">Procesar contenido</span>
           </button>
@@ -423,38 +463,41 @@
         <article id="card2"
           class="bg-slate-950/80 border border-cyan-500/20 rounded-xl p-4 flex flex-col justify-between min-h-[130px]">
           <div class="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
-            <i class="fa-solid fa-crosshair text-emerald-400"></i> Confianza / Probabilidad
+            <i class="fa-solid fa-gauge-high text-cyan-400"></i> Nivel de Confianza
           </div>
           <div>
-            <div class="text-xl font-extrabold text-emerald-400" id="resProbabilidad">0.00%</div>
-            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden my-1">
-              <div id="progressFill" class="h-full bg-emerald-400 rounded-full transition-all duration-500"
-                style="width: 0%;"></div>
+            <div class="flex justify-between items-baseline mb-1.5">
+              <span class="text-xs text-slate-400">Probabilidad</span>
+              <span class="text-sm font-bold text-cyan-300" id="resProbabilidad">0%</span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div id="progressFill"
+                class="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full transition-all duration-500"
+                style="width: 0%"></div>
             </div>
           </div>
-          <div class="text-[10px] text-slate-400">Precisión del clasificador</div>
+          <div class="text-[10px] text-slate-400">Certeza estadística</div>
         </article>
 
         <article id="card3"
           class="bg-slate-950/80 border border-cyan-500/20 rounded-xl p-4 flex flex-col justify-between min-h-[130px]">
           <div class="flex items-center gap-2 text-xs font-semibold text-slate-300 mb-2">
-            <i class="fa-solid fa-tags text-cyan-400"></i> Entidades y palabras clave
+            <i class="fa-solid fa-tags text-cyan-400"></i> Palabras Clave / Tags
           </div>
-          <div class="flex flex-wrap gap-1 my-1" id="resTags">
-            <span
-              class="bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-2 py-0.5 rounded text-[11px]">Esperando
-              datos</span>
+          <div class="flex flex-wrap gap-1.5" id="resTags">
+            <span class="text-xs text-slate-500 italic">Esperando datos...</span>
           </div>
-          <div class="text-[10px] text-slate-400">Palabras clave extraídas</div>
+          <div class="text-[10px] text-slate-400">Términos más relevantes</div>
         </article>
       </div>
 
-      <!-- Enlace directo al Módulo de Explicabilidad -->
-      <div class="pt-3 border-t border-cyan-500/20 flex justify-end">
-        <a href="explicabilidad.html"
-          class="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1.5">
-          <span>Ver Explicabilidad NLP & Salida JSON completa</span>
-          <i class="fa-solid fa-arrow-right text-xs"></i>
+      <!-- BOTÓN EXPLICABILIDAD -->
+      <div class="pt-2 flex justify-end">
+        <a href="/explicabilidad.html"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-slate-950/80 hover:bg-cyan-500/10 border border-cyan-500/30 hover:border-cyan-400 rounded-xl text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition-all shadow-md">
+          <i class="fa-solid fa-chart-pie text-cyan-400"></i>
+          <span>Ver Explicabilidad y Feature Importance</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
         </a>
       </div>
     </section>
@@ -498,7 +541,11 @@
       toast.innerHTML = `<i class="${iconClasses[type]} text-sm"></i><span class="flex-1">${message}</span>`;
 
       toastContainer.appendChild(toast);
-      requestAnimationFrame(() => toast.classList.remove('translate-y-2', 'opacity-0'));
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
       setTimeout(() => {
         toast.classList.add('opacity-0', 'translate-y-2');
         setTimeout(() => toast.remove(), 300);
@@ -541,8 +588,6 @@
       if (tituloInput.value.trim() || textoInput.value.trim()) clearInputErrors();
     });
 
-    let selectedFile = null;
-
 
 
     // Cargar muestra si viene redireccionado desde recomendaciones.html
@@ -557,10 +602,86 @@
       showToast("Documento de recomendación cargado en el clasificador ML.", "info");
     }
 
+    let selectedFile = null;
+    const dropZoneDefault = document.getElementById('dropZoneDefault');
+    const dropZoneSelected = document.getElementById('dropZoneSelected');
+    const selectedFileName = document.getElementById('selectedFileName');
+    const selectedFileSize = document.getElementById('selectedFileSize');
+    const fileTypeIcon = document.getElementById('fileTypeIcon');
+    const fileIconContainer = document.getElementById('fileIconContainer');
+    const btnRemoveFile = document.getElementById('btnRemoveFile');
+
+    function formatearTamanoArchivo(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function obtenerConfigIconoArchivo(nombre) {
+      const ext = nombre.split('.').pop().toLowerCase();
+      switch (ext) {
+        case 'pdf':
+          return { icon: 'fa-solid fa-file-pdf', boxClass: 'icon-box-pdf' };
+        case 'docx':
+        case 'doc':
+          return { icon: 'fa-solid fa-file-word', boxClass: 'icon-box-docx' };
+        case 'csv':
+          return { icon: 'fa-solid fa-file-csv', boxClass: 'icon-box-csv' };
+        case 'txt':
+          return { icon: 'fa-solid fa-file-lines', boxClass: 'icon-box-txt' };
+        default:
+          return { icon: 'fa-solid fa-file', boxClass: 'icon-box-default' };
+      }
+    }
+
+    function establecerArchivoSeleccionado(file) {
+      if (!file) return;
+      selectedFile = file;
+
+      if (!tituloInput.value.trim()) {
+        const nombreSinExt = file.name.replace(/\.[^/.]+$/, "");
+        tituloInput.value = nombreSinExt;
+      }
+
+      if (dropZoneDefault && dropZoneSelected) {
+        dropZoneDefault.classList.add('hidden');
+        dropZoneSelected.classList.remove('hidden');
+        dropZoneSelected.classList.add('flex');
+
+        if (selectedFileName) selectedFileName.textContent = file.name;
+        if (selectedFileSize) selectedFileSize.textContent = formatearTamanoArchivo(file.size);
+
+        if (fileTypeIcon && fileIconContainer) {
+          const config = obtenerConfigIconoArchivo(file.name);
+          fileTypeIcon.className = config.icon;
+          fileIconContainer.className = `w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-lg ${config.boxClass}`;
+        }
+      }
+
+      showToast(`Archivo "${file.name}" cargado para enviar al API ML.`, "info");
+    }
+
+    function quitarArchivoSeleccionado() {
+      selectedFile = null;
+      if (fileInput) fileInput.value = '';
+      if (dropZoneDefault && dropZoneSelected) {
+        dropZoneSelected.classList.add('hidden');
+        dropZoneSelected.classList.remove('flex');
+        dropZoneDefault.classList.remove('hidden');
+      }
+    }
+
+    btnRemoveFile?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      quitarArchivoSeleccionado();
+      showToast("Archivo removido.", "info");
+    });
+
     document.querySelectorAll('.btnSample').forEach(btn => {
       btn.addEventListener('click', () => {
-        selectedFile = null;
-        fileInput.value = '';
+        quitarArchivoSeleccionado();
         const type = btn.getAttribute('data-sample');
         if (type === 'backend') {
           tituloInput.value = "Desarollo de REST API con Spring Boot 3 y Java 21";
@@ -581,15 +702,7 @@
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
-        selectedFile = file;
-        tituloInput.value = file.name.replace(/\.[^/.]+$/, "");
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          textoInput.value = evt.target.result;
-          charCount.textContent = `${textoInput.value.length} caracteres`;
-          showToast(`Archivo "${file.name}" cargado para inferencia ML.`, "success");
-        };
-        reader.readAsText(file);
+        establecerArchivoSeleccionado(file);
       }
     });
 
@@ -605,16 +718,7 @@
       e.preventDefault();
       dropZone.classList.remove('border-cyan-400', 'bg-cyan-950/30');
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        const file = e.dataTransfer.files[0];
-        selectedFile = file;
-        tituloInput.value = file.name.replace(/\.[^/.]+$/, "");
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          textoInput.value = evt.target.result;
-          charCount.textContent = `${textoInput.value.length} caracteres`;
-          showToast(`Archivo "${file.name}" soltado y cargado correctamente.`, "success");
-        };
-        reader.readAsText(file);
+        establecerArchivoSeleccionado(e.dataTransfer.files[0]);
       }
     });
 
@@ -749,8 +853,7 @@
         }));
 
         showToast(`Inferencia ML completada (${categoria} - ${confianzaStr}).`, "success");
-        selectedFile = null;
-        fileInput.value = '';
+        quitarArchivoSeleccionado();
       } catch (err) {
         console.warn("Respuesta diferida o error de API ML:", err);
         showToast("Error de conexión API ML. Ejecutando estimación de contingencia local...", "warning");

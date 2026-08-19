@@ -16,6 +16,8 @@ public interface ContenidoRepository extends JpaRepository<Contenido, Long> {
     @Query("SELECT c.categoria FROM Contenido c WHERE c.categoria IS NOT NULL GROUP BY c.categoria ORDER BY COUNT(c) DESC LIMIT 1")
     String findTopCategoria();
 
+    List<Contenido> findAllByConfianzaIsNotNull();
+
     List<Contenido> findByCategoriaContainingIgnoreCaseOrTituloContainingIgnoreCaseOrTextoContainingIgnoreCase(
             String categoria, String titulo, String texto);
 }

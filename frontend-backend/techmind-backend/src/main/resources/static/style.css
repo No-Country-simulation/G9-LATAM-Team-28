@@ -361,3 +361,160 @@ body.light-mode #editProfileModal > div {
 #userDropdownMenu {
   z-index: 100 !important;
 }
+
+/* ==========================================================================
+   ESTILOS DE FORMATOS DE ARCHIVO PERMITIDOS Y DROPZONE (DARK & LIGHT)
+   ========================================================================== */
+
+/* Badges de Formatos de Archivo en Dark Mode */
+.file-format-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease;
+}
+
+.format-pdf {
+  background-color: rgba(225, 29, 72, 0.15);
+  border: 1px solid rgba(244, 63, 94, 0.35);
+  color: #fda4af;
+}
+
+.format-txt {
+  background-color: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.35);
+  color: #67e8f9;
+}
+
+.format-csv {
+  background-color: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+}
+
+.format-docx {
+  background-color: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #93c5fd;
+}
+
+/* Cajas de Icono de Archivo Seleccionado en Dark Mode */
+.icon-box-pdf {
+  background-color: rgba(225, 29, 72, 0.18);
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #fb7185;
+}
+
+.icon-box-docx {
+  background-color: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+}
+
+.icon-box-csv {
+  background-color: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.icon-box-txt {
+  background-color: rgba(6, 182, 212, 0.18);
+  border: 1px solid rgba(6, 182, 212, 0.4);
+  color: #22d3ee;
+}
+
+.icon-box-default {
+  background-color: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(100, 116, 139, 0.4);
+  color: #cbd5e1;
+}
+
+/* Badges de Formatos de Archivo en Modo Claro */
+body.light-mode .format-pdf {
+  background-color: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #e11d48 !important;
+}
+
+body.light-mode .format-txt {
+  background-color: #f0f9ff !important;
+  border-color: #bae6fd !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode .format-csv {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #059669 !important;
+}
+
+body.light-mode .format-docx {
+  background-color: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #2563eb !important;
+}
+
+/* Cajas de Icono de Archivo Seleccionado en Modo Claro */
+body.light-mode .icon-box-pdf {
+  background-color: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #e11d48 !important;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.15) !important;
+}
+
+body.light-mode .icon-box-docx {
+  background-color: #eff6ff !important;
+  border-color: #bfdbfe !important;
+  color: #2563eb !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15) !important;
+}
+
+body.light-mode .icon-box-csv {
+  background-color: #ecfdf5 !important;
+  border-color: #a7f3d0 !important;
+  color: #059669 !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15) !important;
+}
+
+body.light-mode .icon-box-txt {
+  background-color: #f0f9ff !important;
+  border-color: #bae6fd !important;
+  color: #0284c7 !important;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15) !important;
+}
+
+body.light-mode .icon-box-default {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+/* DropZone y Controles en Modo Claro */
+body.light-mode #selectedFileName {
+  color: #0f172a !important;
+}
+
+body.light-mode #selectedFileSize {
+  color: #0284c7 !important;
+}
+
+body.light-mode #btnRemoveFile {
+  background-color: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+  color: #e11d48 !important;
+}
+
+body.light-mode #btnRemoveFile:hover {
+  background-color: #ffe4e6 !important;
+  color: #be123c !important;
+}
+
+body.light-mode #dropZoneDefault span.text-slate-200 {
+  color: #0f172a !important;
+}
+
+body.light-mode #dropZoneDefault span.text-slate-400 {
+  color: #64748b !important;
+}
