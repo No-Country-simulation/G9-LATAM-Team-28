@@ -13,6 +13,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <!-- PDF.js: lectura de archivos PDF en el browser -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- mammoth.js: lectura de archivos DOCX/DOC en el browser -->
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
 </head>
 
 <body
@@ -629,6 +633,80 @@
       }
     }
 
+    // Configura el worker de PDF.js
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    function primerN200Lineas(textoCompleto) {
+      const lines = textoCompleto.split('\n');
+      return { text: lines.slice(0, 200).join('\n'), total: lines.length };
+    }
+
+    function inyectarTextoEnFormulario(texto, nombreArchivo) {
+      const { text, total } = primerN200Lineas(texto);
+      textoInput.value = text;
+      charCount.textContent = `${textoInput.value.length} caracteres`;
+      showToast(
+        `Primeras ${Math.min(total, 200)} líneas de "${nombreArchivo}" cargadas en el área de texto.`,
+        'success'
+      );
+    }
+
+    async function leerContenidoArchivo(file) {
+      const ext = file.name.split('.').pop().toLowerCase();
+
+      if (ext === 'txt' || ext === 'csv') {
+        // ── Texto plano / CSV: FileReader nativo ───────────────────────────
+        const reader = new FileReader();
+        reader.onload = (ev) => inyectarTextoEnFormulario(ev.target.result, file.name);
+        reader.onerror = () => showToast('No se pudo leer el archivo.', 'error');
+        reader.readAsText(file, 'UTF-8');
+
+      } else if (ext === 'pdf') {
+        // ── PDF: PDF.js ────────────────────────────────────────────────────
+        if (typeof pdfjsLib === 'undefined') {
+          showToast('La librería PDF.js no está disponible. Revisa tu conexión.', 'error');
+          return;
+        }
+        showToast(`Leyendo PDF "${file.name}"...`, 'info');
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          let textoCompleto = '';
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            const pageText = content.items.map(item => item.str).join(' ');
+            textoCompleto += pageText + '\n';
+            // Parar si ya tenemos más de 200 líneas
+            if (textoCompleto.split('\n').length > 200) break;
+          }
+          inyectarTextoEnFormulario(textoCompleto, file.name);
+        } catch (err) {
+          console.error('Error leyendo PDF:', err);
+          showToast('No se pudo extraer texto del PDF. El servidor lo procesará.', 'warning');
+        }
+
+      } else if (ext === 'docx' || ext === 'doc') {
+        // ── DOCX/DOC: mammoth.js ───────────────────────────────────────────
+        if (typeof mammoth === 'undefined') {
+          showToast('La librería mammoth.js no está disponible. Revisa tu conexión.', 'error');
+          return;
+        }
+        showToast(`Leyendo documento "${file.name}"...`, 'info');
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          inyectarTextoEnFormulario(result.value, file.name);
+        } catch (err) {
+          console.error('Error leyendo DOCX:', err);
+          showToast('No se pudo extraer texto del documento. El servidor lo procesará.', 'warning');
+        }
+      }
+    }
+
     function establecerArchivoSeleccionado(file) {
       if (!file) return;
       selectedFile = file;
@@ -653,12 +731,14 @@
         }
       }
 
-      showToast(`Archivo "${file.name}" cargado para enviar al API ML.`, "info");
+      leerContenidoArchivo(file);
     }
 
     function quitarArchivoSeleccionado() {
       selectedFile = null;
       if (fileInput) fileInput.value = '';
+      textoInput.value = '';
+      charCount.textContent = '0 caracteres';
       if (dropZoneDefault && dropZoneSelected) {
         dropZoneSelected.classList.add('hidden');
         dropZoneSelected.classList.remove('flex');
