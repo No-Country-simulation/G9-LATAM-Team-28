@@ -147,36 +147,6 @@
     </div>
   </div>
 
-  <!-- MODAL DE PRUEBAS AUTOMATIZADAS -->
-  <div id="testsModal"
-    class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-cyan-500/30 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between border-b border-cyan-500/20 pb-3">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider">Ejecutor de Pruebas Automatizadas
-            (Pytest / Jest)</span>
-        </div>
-        <button id="closeTestsModal" class="text-slate-400 hover:text-white p-1 rounded-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div id="testConsole"
-        class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-slate-300 space-y-1.5 border border-slate-800 max-h-64 overflow-y-auto">
-        <div class="text-slate-500">$ pytest tests/test_nlp_api.py -v</div>
-        <div class="text-emerald-400">PASSED [ 25%] test_recepcion_contenido</div>
-        <div class="text-emerald-400">PASSED [ 50%] test_validacion_entradas</div>
-        <div class="text-emerald-400">PASSED [ 75%] test_clasificacion_modelo</div>
-        <div class="text-emerald-400">PASSED [100%] test_manejo_errores_fallback</div>
-        <div class="text-cyan-300 font-bold mt-2">=== 4 passed in 0.42s ===</div>
-      </div>
-      <div class="flex justify-end gap-2">
-        <button id="runTestsBtn"
-          class="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500 text-slate-950 hover:bg-cyan-400 transition-all flex items-center gap-1.5">
-          <i class="fa-solid fa-rotate-right"></i> Re-ejecutar Tests
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- CABECERA MÓVIL -->
   <header
@@ -292,10 +262,6 @@
       </div>
 
       <div class="flex items-center gap-2.5">
-        <button id="openTestsBtn"
-          class="px-3 py-1.5 rounded-xl bg-slate-950 border border-cyan-500/30 text-xs font-semibold text-cyan-300 hover:bg-cyan-500/20 transition-all flex items-center gap-1.5">
-          <i class="fa-solid fa-vial-circle-check text-cyan-400"></i> <span>Ejecutar Tests</span>
-        </button>
 
 
 
@@ -418,10 +384,6 @@
 
   <script>
     const toastContainer = document.getElementById('toastContainer');
-    const testsModal = document.getElementById('testsModal');
-    const openTestsBtn = document.getElementById('openTestsBtn');
-    const closeTestsModal = document.getElementById('closeTestsModal');
-    const runTestsBtn = document.getElementById('runTestsBtn');
 
     function showToast(message, type = 'info') {
       const toast = document.createElement('div');
@@ -467,12 +429,6 @@
     }
     cargarMetricasApi();
 
-    openTestsBtn?.addEventListener('click', () => testsModal.classList.remove('hidden'));
-    closeTestsModal?.addEventListener('click', () => testsModal.classList.add('hidden'));
-    runTestsBtn?.addEventListener('click', () => {
-      showToast("Ejecutando suite de pruebas automatizadas...", "info");
-      setTimeout(() => showToast("4/4 Tests aprobados exitosamente", "success"), 600);
-    });
 
     const globalHeaderSearch = document.getElementById('globalHeaderSearch');
     if (globalHeaderSearch) {
