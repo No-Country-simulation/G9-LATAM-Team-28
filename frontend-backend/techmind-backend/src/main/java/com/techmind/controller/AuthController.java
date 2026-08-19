@@ -4,6 +4,7 @@ import com.techmind.config.JwtConfig;
 import com.techmind.dto.AuthResponse;
 import com.techmind.dto.LoginRequest;
 import com.techmind.dto.RegisterRequest;
+import com.techmind.dto.UpdateProfileRequest;
 import com.techmind.dto.UserMeResponse;
 import com.techmind.entity.User;
 import com.techmind.repository.UserRepository;
@@ -93,5 +94,46 @@ public class AuthController {
             return ResponseEntity.ok(new UserMeResponse(user.getId(), user.getEmail(), user.getNombre(), user.getRol()));
         }
         return ResponseEntity.status(401).body("No autenticado");
+    }
+
+    @PutMapping("/profile")
+    @Operation(summary = "Actualizar perfil de usuario", description = "Permite actualizar nombre, correo y contraseña del usuario autenticado")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateProfileRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !(auth.getPrincipal() instanceof UserDetails userDetails)) {
+            return ResponseEntity.status(401).body("No autenticado");
+        }
+
+        User user = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (request.getEmail() != null && !request.getEmail().isBlank() && !request.getEmail().equalsIgnoreCase(user.getEmail())) {
+            if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+                return ResponseEntity.badRequest().body("El correo electrónico ya está en uso por otra cuenta.");
+            }
+            user.setEmail(request.getEmail());
+        }
+
+        if (request.getNombre() != null && !request.getNombre().isBlank()) {
+            user.setNombre(request.getNombre());
+        }
+
+        if (request.getNewPassword() != null && !request.getNewPassword().isBlank()) {
+            if (request.getCurrentPassword() == null || request.getCurrentPassword().isBlank()) {
+                return ResponseEntity.badRequest().body("Debes ingresar tu contraseña actual para establecer una nueva.");
+            }
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                return ResponseEntity.badRequest().body("La contraseña actual es incorrecta.");
+            }
+            if (request.getNewPassword().length() < 6) {
+                return ResponseEntity.badRequest().body("La nueva contraseña debe tener al menos 6 caracteres.");
+            }
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        }
+
+        userRepository.save(user);
+
+        String token = jwtConfig.generarToken(user.getEmail());
+        return ResponseEntity.ok(new AuthResponse(token, user.getEmail(), user.getNombre()));
     }
 }

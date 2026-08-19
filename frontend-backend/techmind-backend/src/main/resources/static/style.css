@@ -275,8 +275,8 @@ body.light-mode #testConsole {
 }
 
 /* Divisores de Línea */
-body.light-mode .border-cyan-500/20,
-body.light-mode .border-cyan-500/30,
+body.light-mode .border-cyan-500\/20,
+body.light-mode .border-cyan-500\/30,
 body.light-mode .border-slate-800 {
   border-color: #e2e8f0 !important;
 }
@@ -319,4 +319,45 @@ body.light-mode #clearHistoryBtn i {
 body.light-mode #clearHistoryBtn:hover {
   background-color: #be123c !important;
   color: #ffffff !important;
+}
+
+/* Menú Desplegable de Usuario y Modal de Perfil en Modo Claro */
+body.light-mode #userDropdownMenu {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.25) !important;
+}
+
+body.light-mode #userDropdownMenu button {
+  color: #334155 !important;
+}
+
+body.light-mode #userDropdownMenu button:hover {
+  background-color: #f1f5f9 !important;
+  color: #0284c7 !important;
+}
+
+body.light-mode #userDropdownMenu #headerLogoutBtn {
+  color: #e11d48 !important;
+}
+
+body.light-mode #userDropdownMenu #headerLogoutBtn:hover {
+  background-color: #fff1f2 !important;
+  color: #be123c !important;
+}
+
+body.light-mode #editProfileModal > div {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 25px 50px -12px rgba(148, 163, 184, 0.35) !important;
+}
+
+/* Elevación de z-index para Menú Desplegable */
+#userMenuDropdownContainer {
+  position: relative;
+  z-index: 50;
+}
+
+#userDropdownMenu {
+  z-index: 100 !important;
 }
