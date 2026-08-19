@@ -71,11 +71,6 @@
           <span>Predicción inteligente</span>
         </a>
 
-        <a href="explicabilidad.html"
-          class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-900 hover:text-slate-200 transition-all">
-          <i class="fa-solid fa-brain text-sm"></i>
-          <span>Transparencia e integración</span>
-        </a>
 
         <a href="recomendaciones.html"
           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:bg-slate-900 hover:text-slate-200 transition-all">
@@ -101,13 +96,16 @@
     <div class="pt-4 border-t border-cyan-500/20">
       <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-900/80 border border-cyan-500/20">
         <div class="flex items-center gap-3 min-w-0 flex-1">
-          <div id="userAvatarBtn" class="w-8 h-8 rounded-full bg-cyan-500 text-slate-950 font-extrabold text-xs flex items-center justify-center shrink-0">U</div>
+          <div id="userAvatarBtn"
+            class="w-8 h-8 rounded-full bg-cyan-500 text-slate-950 font-extrabold text-xs flex items-center justify-center shrink-0">
+            U</div>
           <div class="flex flex-col min-w-0 flex-1">
             <span id="userNameLabel" class="text-xs font-semibold text-slate-200 truncate">Usuario</span>
             <span id="userEmailLabel" class="text-[10px] text-slate-400 truncate">Autenticado</span>
           </div>
         </div>
-        <button id="logoutBtn" title="Cerrar sesión" aria-label="Cerrar sesión" class="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors shrink-0">
+        <button id="logoutBtn" title="Cerrar sesión" aria-label="Cerrar sesión"
+          class="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors shrink-0">
           <i class="fa-solid fa-right-from-bracket text-xs"></i>
         </button>
       </div>
@@ -142,18 +140,8 @@
       <!-- UTILIDADES CORPORATIVAS Y PERFIL -->
       <div class="flex items-center gap-2.5">
 
-        <!-- Region Badge -->
-        <span
-          class="hidden xl:flex items-center gap-1.5 text-[11px] font-semibold text-cyan-300 bg-slate-950 border border-cyan-500/30 px-2.5 py-1 rounded-lg">
-          <i class="fa-solid fa-globe text-cyan-400"></i> us-ashburn-1
-        </span>
 
-        <!-- Status Endpoint Badge -->
-        <span id="statusBadge"
-          class="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          200 OK
-        </span>
+
 
         <!-- Switcher de Tema -->
         <button id="themeToggleDesktop" aria-label="Cambiar tema" title="Cambiar tema (Claro / Oscuro)"
@@ -162,17 +150,13 @@
           <i id="themeSunDesktop" class="fa-solid fa-sun text-sm hidden text-amber-400"></i>
         </button>
 
-        <!-- Notificaciones -->
-        <button
-          class="relative p-2 text-slate-400 hover:text-cyan-300 hover:bg-cyan-500/10 rounded-lg transition-colors"
-          title="Notificaciones del sistema">
-          <i class="fa-regular fa-bell text-sm"></i>
-          <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cyan-400 rounded-full"></span>
-        </button>
+
 
         <!-- User Profile Pill -->
         <div class="flex items-center gap-2 pl-2 pr-2.5 py-1 rounded-xl bg-slate-950 border border-cyan-500/30">
-          <div id="headerUserAvatar" class="w-6 h-6 rounded-full bg-cyan-500 text-slate-950 font-bold text-[11px] flex items-center justify-center shrink-0">U</div>
+          <div id="headerUserAvatar"
+            class="w-6 h-6 rounded-full bg-cyan-500 text-slate-950 font-bold text-[11px] flex items-center justify-center shrink-0">
+            U</div>
           <span id="headerUserName" class="text-xs font-semibold text-slate-200">Usuario</span>
           <button id="headerLogoutBtn" title="Cerrar sesión" class="ml-1 text-slate-400 hover:text-rose-400 text-xs">
             <i class="fa-solid fa-right-from-bracket"></i>
@@ -213,24 +197,28 @@
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1">
             <label for="tituloInput" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Título del
-              Contenido Técnico <span class="text-slate-400 font-normal text-[10px] lowercase">(opcional si hay texto/archivo)</span></label>
+              Contenido Técnico <span class="text-slate-400 font-normal text-[10px] lowercase">(opcional si hay
+                texto/archivo)</span></label>
             <input type="text" id="tituloInput" placeholder="Ej: Introducción a Spring Boot REST API"
               class="w-full bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all">
             <span id="tituloError" class="hidden text-xs text-rose-400 font-medium mt-0.5"><i
-                class="fa-solid fa-circle-exclamation mr-1"></i>Ingresa al menos un título, documentación o archivo.</span>
+                class="fa-solid fa-circle-exclamation mr-1"></i>Ingresa al menos un título, documentación o
+              archivo.</span>
           </div>
 
           <div class="flex flex-col gap-1">
             <div class="flex items-center justify-between">
               <label for="textoInput" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Documentación
-                / Apuntes / Texto <span class="text-slate-400 font-normal text-[10px] lowercase">(opcional si hay título/archivo)</span></label>
+                / Apuntes / Texto <span class="text-slate-400 font-normal text-[10px] lowercase">(opcional si hay
+                  título/archivo)</span></label>
               <span class="text-xs text-slate-400" id="charCount">0 caracteres</span>
             </div>
             <textarea id="textoInput"
               placeholder="Ingresa la descripción del artículo, código o anotación que deseas procesar..."
               class="w-full h-32 bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl p-4 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40 transition-all resize-none"></textarea>
             <span id="textoError" class="hidden text-xs text-rose-400 font-medium mt-0.5"><i
-                class="fa-solid fa-circle-exclamation mr-1"></i>Ingresa al menos un título, documentación o archivo.</span>
+                class="fa-solid fa-circle-exclamation mr-1"></i>Ingresa al menos un título, documentación o
+              archivo.</span>
           </div>
         </div>
 
@@ -395,26 +383,7 @@
 
     let selectedFile = null;
 
-    async function checkMlHealth() {
-      const statusBadge = document.getElementById('statusBadge');
-      if (!statusBadge) return;
-      try {
-        const res = await fetch('/contenido/ml-health');
-        if (res.ok) {
-          const health = await res.json();
-          if (health.status === 'healthy' && health.model_loaded !== false) {
-            statusBadge.className = 'inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-lg';
-            statusBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> ML v${health.version || '2.0.0'} OK`;
-            return;
-          }
-        }
-      } catch (e) {
-        console.warn("No se pudo obtener el estado de salud del modelo ML:", e);
-      }
-      statusBadge.className = 'inline-flex items-center gap-1.5 text-[11px] font-medium text-amber-400 bg-amber-950/60 border border-amber-500/30 px-2.5 py-1 rounded-lg';
-      statusBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> ML Offline`;
-    }
-    checkMlHealth();
+
 
     // Cargar muestra si viene redireccionado desde recomendaciones.html
     const sampleTitle = localStorage.getItem('techmind_sample_title');

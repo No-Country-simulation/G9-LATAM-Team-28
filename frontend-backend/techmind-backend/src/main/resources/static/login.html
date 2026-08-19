@@ -15,15 +15,18 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-slate-100 flex items-center justify-center p-4 sm:p-6 transition-colors duration-300">
+<body
+  class="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black text-slate-100 flex items-center justify-center p-4 sm:p-6 transition-colors duration-300">
 
   <!-- CONTENEDOR DE TOAST NOTIFICATIONS -->
-  <div id="toastContainer" aria-live="polite" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+  <div id="toastContainer" aria-live="polite"
+    class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
   <!-- CONTENIDO PRINCIPAL: LOGIN / REGISTRO (SIN BARRA LATERAL) -->
   <main class="w-full max-w-md my-auto">
-    <div class="bg-slate-900/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-cyan-950/50 space-y-6">
-      
+    <div
+      class="bg-slate-900/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-cyan-950/50 space-y-6">
+
       <div class="flex justify-between items-center pb-4 border-b border-cyan-500/20">
         <div class="flex items-center gap-3">
           <div class="text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]">
@@ -34,7 +37,8 @@
             <p class="text-[11px] text-slate-400">Portal de Autenticación de Usuarios</p>
           </div>
         </div>
-        <button id="themeToggleDesktop" aria-label="Cambiar tema" class="p-2 text-slate-400 hover:text-cyan-300 hover:bg-cyan-500/10 rounded-full">
+        <button id="themeToggleDesktop" aria-label="Cambiar tema"
+          class="p-2 text-slate-400 hover:text-cyan-300 hover:bg-cyan-500/10 rounded-full">
           <i id="themeMoonDesktop" class="fa-solid fa-moon text-lg"></i>
           <i id="themeSunDesktop" class="fa-solid fa-sun text-lg hidden text-amber-400"></i>
         </button>
@@ -42,33 +46,41 @@
 
       <!-- PESTAÑAS LOGIN / REGISTRO -->
       <div class="flex bg-slate-950 p-1 rounded-xl border border-cyan-500/20">
-        <button id="tabLogin" class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-950 bg-cyan-500 transition-all shadow-sm">Iniciar Sesión</button>
-        <button id="tabRegister" class="flex-1 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all">Crear Cuenta</button>
+        <button id="tabLogin"
+          class="flex-1 py-2 rounded-lg text-xs font-bold text-slate-950 bg-cyan-500 transition-all shadow-sm">Iniciar
+          Sesión</button>
+        <button id="tabRegister"
+          class="flex-1 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all">Crear
+          Cuenta</button>
       </div>
 
       <!-- FORMULARIO LOGIN -->
       <form id="formLogin" class="space-y-4" novalidate>
         <div class="space-y-1">
-          <label for="loginEmail" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Correo Electrónico</label>
+          <label for="loginEmail" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Correo
+            Electrónico</label>
           <input type="email" id="loginEmail" placeholder="usuario@empresa.com" required
             class="w-full bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40">
         </div>
 
         <div class="space-y-1">
           <div class="flex items-center justify-between">
-            <label for="loginPassword" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Contraseña</label>
-            <a href="#" id="forgotPasswordBtn" class="text-[11px] text-cyan-400 hover:underline">¿Olvidaste tu contraseña?</a>
+            <label for="loginPassword"
+              class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Contraseña</label>
+
           </div>
           <div class="relative">
             <input type="password" id="loginPassword" placeholder="••••••••" required
               class="w-full bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40">
-            <button type="button" id="toggleLoginPass" class="absolute right-3 top-2.5 text-slate-400 hover:text-cyan-300 text-xs">
+            <button type="button" id="toggleLoginPass"
+              class="absolute right-3 top-2.5 text-slate-400 hover:text-cyan-300 text-xs">
               <i class="fa-regular fa-eye"></i>
             </button>
           </div>
         </div>
 
-        <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition-all shadow-lg shadow-cyan-500/20 active:scale-[0.99] flex items-center justify-center gap-2">
+        <button type="submit"
+          class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition-all shadow-lg shadow-cyan-500/20 active:scale-[0.99] flex items-center justify-center gap-2">
           <i class="fa-solid fa-right-to-bracket"></i> Ingresar a TechMind
         </button>
       </form>
@@ -76,36 +88,42 @@
       <!-- FORMULARIO REGISTRO -->
       <form id="formRegister" class="space-y-4 hidden" novalidate>
         <div class="space-y-1">
-          <label for="regName" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Nombre Completo</label>
+          <label for="regName" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Nombre
+            Completo</label>
           <input type="text" id="regName" placeholder="Gabriel Ramos" required
             class="w-full bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40">
         </div>
 
         <div class="space-y-1">
-          <label for="regEmail" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Correo Corporativo</label>
+          <label for="regEmail" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Correo
+            Corporativo</label>
           <input type="email" id="regEmail" placeholder="gabriel@empresa.com" required
             class="w-full bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40">
         </div>
 
         <div class="space-y-1">
-          <label for="regPassword" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Crear Contraseña</label>
-          <input type="password" id="regPassword" placeholder="••••••••" required
-            class="w-full bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40">
+          <label for="regPassword" class="text-xs font-semibold text-slate-200 uppercase tracking-wide">Crear
+            Contraseña</label>
+          <div class="relative">
+            <input type="password" id="regPassword" placeholder="••••••••" required
+              class="w-full bg-slate-950/80 border border-cyan-500/30 focus:border-cyan-400 rounded-xl pl-4 pr-10 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 outline-none focus:ring-2 focus:ring-cyan-500/40">
+            <button type="button" id="toggleRegPass"
+              class="absolute right-3 top-2.5 text-slate-400 hover:text-cyan-300 text-xs">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
           <div class="w-full h-1 bg-slate-950 rounded-full overflow-hidden mt-1">
-            <div id="passStrengthBar" class="h-full bg-rose-500 transition-all duration-300" style="width: 25%;"></div>
+            <div id="passStrengthBar" class="h-full bg-rose-500 transition-all duration-300" style="width: 0%;"></div>
           </div>
         </div>
 
-        <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition-all shadow-lg shadow-cyan-500/20 active:scale-[0.99] flex items-center justify-center gap-2">
-          <i class="fa-solid fa-user-plus"></i> Registrar Cuenta Corporativa
+        <button type="submit"
+          class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold py-3 rounded-xl text-xs transition-all shadow-lg shadow-cyan-500/20 active:scale-[0.99] flex items-center justify-center gap-2">
+          <i class="fa-solid fa-user-plus"></i> Registrar Cuenta
         </button>
       </form>
 
-      <div class="pt-4 border-t border-slate-800 text-center">
-        <a href="index.html" class="text-xs text-cyan-400 hover:underline inline-flex items-center gap-1.5 font-semibold">
-          <i class="fa-solid fa-arrow-left text-xs"></i> <span>Volver al Clasificador ML</span>
-        </a>
-      </div>
+
     </div>
   </main>
 
@@ -115,6 +133,57 @@
     const formLogin = document.getElementById('formLogin');
     const formRegister = document.getElementById('formRegister');
     const toastContainer = document.getElementById('toastContainer');
+
+    function setupPasswordToggle(btnId, inputId) {
+      const toggleBtn = document.getElementById(btnId);
+      const passInput = document.getElementById(inputId);
+
+      if (toggleBtn && passInput) {
+        toggleBtn.addEventListener('click', () => {
+          const isPassword = passInput.type === 'password';
+          passInput.type = isPassword ? 'text' : 'password';
+          const icon = toggleBtn.querySelector('i');
+          if (icon) {
+            icon.classList.toggle('fa-eye', !isPassword);
+            icon.classList.toggle('fa-eye-slash', isPassword);
+          }
+        });
+      }
+    }
+
+    setupPasswordToggle('toggleLoginPass', 'loginPassword');
+    setupPasswordToggle('toggleRegPass', 'regPassword');
+
+    // Indicador dinámico de fortaleza de contraseña
+    const regPassInput = document.getElementById('regPassword');
+    const passStrengthBar = document.getElementById('passStrengthBar');
+    if (regPassInput && passStrengthBar) {
+      regPassInput.addEventListener('input', () => {
+        const val = regPassInput.value;
+        let score = 0;
+        if (val.length >= 6) score++;
+        if (val.length >= 10) score++;
+        if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+        if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) score++;
+
+        if (val.length === 0) {
+          passStrengthBar.style.width = '0%';
+          passStrengthBar.className = 'h-full bg-slate-700 transition-all duration-300';
+        } else if (score <= 1) {
+          passStrengthBar.style.width = '25%';
+          passStrengthBar.className = 'h-full bg-rose-500 transition-all duration-300';
+        } else if (score === 2) {
+          passStrengthBar.style.width = '50%';
+          passStrengthBar.className = 'h-full bg-amber-500 transition-all duration-300';
+        } else if (score === 3) {
+          passStrengthBar.style.width = '75%';
+          passStrengthBar.className = 'h-full bg-cyan-500 transition-all duration-300';
+        } else {
+          passStrengthBar.style.width = '100%';
+          passStrengthBar.className = 'h-full bg-emerald-500 transition-all duration-300';
+        }
+      });
+    }
 
     function showToast(message, type = 'info') {
       const toast = document.createElement('div');
@@ -237,5 +306,3 @@
 </body>
 
 </html>
-
-
