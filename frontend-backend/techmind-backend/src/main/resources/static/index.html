@@ -585,19 +585,74 @@
       if (tituloInput.value.trim() || textoInput.value.trim()) clearInputErrors();
     });
 
+    function calcularPorcentajeConfianza(resultado) {
+      if (resultado.probabilidad) {
+        return Math.round(resultado.probabilidad > 1 ? resultado.probabilidad : resultado.probabilidad * 100);
+      }
+      return parseInt(resultado.confianza, 10) || 0;
+    }
+
+    function pintarResultadoClasificacion(resultado) {
+      const categoria = resultado.categoria || "Sin clasificar";
+      const confianzaStr = resultado.confianza || `${calcularPorcentajeConfianza(resultado)}%`;
+      const probPct = calcularPorcentajeConfianza({ ...resultado, confianza: confianzaStr });
+      const tags = resultado.palabrasClave || resultado.palabras_clave || resultado.informacionAdicional || resultado.informacion_adicional || [];
+
+      resCategoria.textContent = categoria;
+      resProbabilidad.textContent = `${probPct}%`;
+      progressFill.style.width = `${probPct}%`;
+
+      resTags.innerHTML = '';
+      if (tags.length === 0) {
+        resTags.innerHTML = '<span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded text-[11px]">Sin palabras clave</span>';
+      } else {
+        tags.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 px-2.5 py-0.5 rounded-full text-xs font-medium';
+          span.textContent = tag;
+          resTags.appendChild(span);
+        });
+      }
+
+      return { categoria, confianzaStr, probPct, tags };
+    }
 
 
-    // Cargar muestra si viene redireccionado desde recomendaciones.html
+
+    // Cargar muestra si viene redireccionado desde recomendaciones.html o historial.html
     const sampleTitle = localStorage.getItem('techmind_sample_title');
     const sampleText = localStorage.getItem('techmind_sample_text');
+    const sampleResult = localStorage.getItem('techmind_sample_result');
     if (sampleTitle || sampleText) {
       if (sampleTitle) tituloInput.value = sampleTitle;
       if (sampleText) textoInput.value = sampleText;
       charCount.textContent = `${textoInput.value.length} caracteres`;
       localStorage.removeItem('techmind_sample_title');
       localStorage.removeItem('techmind_sample_text');
-      showToast("Documento de recomendación cargado en el clasificador ML.", "info");
+      if (sampleResult) {
+        try {
+          const resultado = JSON.parse(sampleResult);
+          const pintado = pintarResultadoClasificacion(resultado);
+          localStorage.setItem('techmind_last_res', JSON.stringify({
+            ...resultado,
+            probabilidad: pintado.probPct / 100,
+            palabras_clave: pintado.tags,
+            informacion_adicional: pintado.tags
+          }));
+          showToast("Consulta histórica cargada con su clasificación guardada.", "info");
+        } catch (err) {
+          console.warn("No se pudo restaurar el resultado histórico:", err);
+          showToast("Consulta cargada en el clasificador ML.", "info");
+        } finally {
+          localStorage.removeItem('techmind_sample_result');
+        }
+      } else {
+        showToast("Documento de recomendación cargado en el clasificador ML.", "info");
+      }
     }
+
+    const MAX_EXTRACTED_LINES = 200;
+    const TEXT_PREVIEW_CHUNK_BYTES = 256 * 1024;
 
     let selectedFile = null;
     const dropZoneDefault = document.getElementById('dropZoneDefault');
@@ -639,30 +694,48 @@
         'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    function primerN200Lineas(textoCompleto) {
+    function primerNLineas(textoCompleto, maxLines = MAX_EXTRACTED_LINES) {
       const lines = textoCompleto.split('\n');
-      return { text: lines.slice(0, 200).join('\n'), total: lines.length };
+      return { text: lines.slice(0, maxLines).join('\n'), total: lines.length };
     }
 
     function inyectarTextoEnFormulario(texto, nombreArchivo) {
-      const { text, total } = primerN200Lineas(texto);
+      const { text, total } = primerNLineas(texto);
       textoInput.value = text;
       charCount.textContent = `${textoInput.value.length} caracteres`;
       showToast(
-        `Primeras ${Math.min(total, 200)} líneas de "${nombreArchivo}" cargadas en el área de texto.`,
+        `Primeras ${Math.min(total, MAX_EXTRACTED_LINES)} líneas de "${nombreArchivo}" cargadas en el área de texto.`,
         'success'
       );
+    }
+
+    async function leerPrimerasLineasTexto(file) {
+      let offset = 0;
+      let texto = '';
+
+      while (offset < file.size) {
+        const chunk = file.slice(offset, offset + TEXT_PREVIEW_CHUNK_BYTES);
+        texto += await chunk.text();
+
+        if (texto.split('\n').length >= MAX_EXTRACTED_LINES) break;
+        offset += TEXT_PREVIEW_CHUNK_BYTES;
+      }
+
+      return texto;
     }
 
     async function leerContenidoArchivo(file) {
       const ext = file.name.split('.').pop().toLowerCase();
 
       if (ext === 'txt' || ext === 'csv') {
-        // ── Texto plano / CSV: FileReader nativo ───────────────────────────
-        const reader = new FileReader();
-        reader.onload = (ev) => inyectarTextoEnFormulario(ev.target.result, file.name);
-        reader.onerror = () => showToast('No se pudo leer el archivo.', 'error');
-        reader.readAsText(file, 'UTF-8');
+        // TXT/CSV: leer por partes evita cargar archivos grandes completos.
+        try {
+          const texto = await leerPrimerasLineasTexto(file);
+          inyectarTextoEnFormulario(texto, file.name);
+        } catch (err) {
+          console.error('Error leyendo texto/CSV:', err);
+          showToast('No se pudo leer el archivo.', 'error');
+        }
 
       } else if (ext === 'pdf') {
         // ── PDF: PDF.js ────────────────────────────────────────────────────

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,18 +38,23 @@ public class MlService {
             String texto,
             MultipartFile archivo,
             Long userId) {
-        // 1. Llamar al microservicio Python / ML
-        MlServiceClient.MlClassificationResponse resultado = mlClient.classify(titulo, texto, archivo);
+        // 1. Llamar al microservicio Python / ML.
+        // Si hay archivo, el titulo/texto solo se guardan como metadatos locales;
+        // el modelo recibe el archivo sin campos de texto que condicionen la clasificacion.
+        boolean hayArchivo = archivo != null && !archivo.isEmpty();
+        String tituloParaModelo = hayArchivo ? null : titulo;
+        String textoParaModelo = hayArchivo ? null : texto;
+        MlServiceClient.MlClassificationResponse resultado = mlClient.classify(tituloParaModelo, textoParaModelo, archivo);
 
         // 2. Crear y guardar entidad en PostgreSQL si hay repositorio disponible
         Contenido contenido = new Contenido();
-        contenido.setTitulo(titulo != null && !titulo.isBlank() ? titulo : "Sin titulo");
-        contenido.setTexto(texto);
-        contenido.setCategoria(resultado.categoria());
-        contenido.setConfianza(resultado.confianza());
+        contenido.setTitulo(sanitizarParaBaseDatos(titulo != null && !titulo.isBlank() ? titulo : "Sin titulo"));
+        contenido.setTexto(sanitizarParaBaseDatos(texto));
+        contenido.setCategoria(sanitizarParaBaseDatos(resultado.categoria()));
+        contenido.setConfianza(sanitizarParaBaseDatos(resultado.confianza()));
 
         if (resultado.palabrasClave() != null && !resultado.palabrasClave().isEmpty()) {
-            contenido.setPalabrasClave(String.join(", ", resultado.palabrasClave()));
+            contenido.setPalabrasClave(sanitizarParaBaseDatos(String.join(", ", resultado.palabrasClave())));
         }
 
         if (userId != null) {
@@ -62,6 +69,36 @@ public class MlService {
                 resultado.confianza(),
                 resultado.calcularProbabilidad(),
                 resultado.palabrasClave());
+    }
+
+    private String sanitizarParaBaseDatos(String valor) {
+        if (valor == null) {
+            return null;
+        }
+
+        String normalizado = valor
+                .replace('\u2013', '-')
+                .replace('\u2014', '-')
+                .replace('\u2015', '-')
+                .replace('\u2212', '-')
+                .replace('\u2018', '\'')
+                .replace('\u2019', '\'')
+                .replace('\u201A', '\'')
+                .replace('\u201C', '"')
+                .replace('\u201D', '"')
+                .replace('\u201E', '"')
+                .replace('\u2026', '.')
+                .replace('\u00A0', ' ');
+
+        CharsetEncoder latin1Encoder = StandardCharsets.ISO_8859_1.newEncoder();
+        StringBuilder seguro = new StringBuilder(normalizado.length());
+        normalizado.codePoints().forEach(codePoint -> {
+            String caracter = new String(Character.toChars(codePoint));
+            if (latin1Encoder.canEncode(caracter)) {
+                seguro.append(caracter);
+            }
+        });
+        return seguro.toString();
     }
 
     public List<ContenidoHistoryDto> obtenerHistorial(Long userId) {

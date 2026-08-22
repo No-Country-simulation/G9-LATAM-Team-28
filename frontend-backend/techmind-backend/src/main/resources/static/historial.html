@@ -434,20 +434,27 @@
               <span class="text-[10px] text-slate-400 block mt-0.5">${item.categoria} • ${item.fecha}</span>
             </div>
           </div>
-          <button type="button" onclick="reintentarInferencia('${encodeURIComponent(item.titulo)}', '${encodeURIComponent(item.texto)}')" 
+          <button type="button"
             class="text-[11px] font-bold text-cyan-400 hover:text-cyan-300 hover:underline flex items-center gap-1 shrink-0 cursor-pointer pt-1">
             Cargar <i class="fa-solid fa-arrow-right text-[10px]"></i>
           </button>
         `;
+        div.querySelector('button')?.addEventListener('click', () => reintentarInferencia(item));
         historialListGrid.appendChild(div);
       });
     }
 
-    function reintentarInferencia(tituloEnc, textoEnc) {
-      const titulo = decodeURIComponent(tituloEnc);
-      const texto = decodeURIComponent(textoEnc);
-      localStorage.setItem('techmind_sample_title', titulo);
-      localStorage.setItem('techmind_sample_text', texto);
+    function reintentarInferencia(item) {
+      localStorage.setItem('techmind_sample_title', item.titulo);
+      localStorage.setItem('techmind_sample_text', item.texto);
+      localStorage.setItem('techmind_sample_result', JSON.stringify({
+        titulo: item.titulo,
+        texto: item.texto,
+        categoria: item.categoria,
+        confianza: item.confianza,
+        palabras_clave: item.palabrasClave || [],
+        informacion_adicional: item.palabrasClave || []
+      }));
       window.location.href = "index.html";
     }
 
